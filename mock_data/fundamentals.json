@@ -1,0 +1,52 @@
+{
+  "AAPL": [
+    {"datadate": "2024-12-31", "fyearq": 2025, "fqtr": 1, "revtq": 124300, "niq": 36330, "epspxq": 2.40, "epsfxq": 2.35, "atq": 364980, "ltq": 290437, "ceqq": 74543, "oiadpq": 42830, "gpq": 58120, "cshoq": 15115, "prccq": 243.85, "saleq": 124300},
+    {"datadate": "2024-09-30", "fyearq": 2024, "fqtr": 4, "revtq": 94930, "niq": 14736, "epspxq": 0.97, "epsfxq": 0.95, "atq": 364840, "ltq": 290820, "ceqq": 74020, "oiadpq": 29590, "gpq": 43870, "cshoq": 15204, "prccq": 233.00, "saleq": 94930},
+    {"datadate": "2024-06-30", "fyearq": 2024, "fqtr": 3, "revtq": 85778, "niq": 21448, "epspxq": 1.40, "epsfxq": 1.37, "atq": 331640, "ltq": 264816, "ceqq": 66824, "oiadpq": 28200, "gpq": 39680, "cshoq": 15334, "prccq": 210.62, "saleq": 85778},
+    {"datadate": "2024-03-31", "fyearq": 2024, "fqtr": 2, "revtq": 90753, "niq": 23636, "epspxq": 1.53, "epsfxq": 1.50, "atq": 337320, "ltq": 269055, "ceqq": 68265, "oiadpq": 30070, "gpq": 42270, "cshoq": 15441, "prccq": 171.48, "saleq": 90753},
+    {"datadate": "2023-12-31", "fyearq": 2024, "fqtr": 1, "revtq": 119575, "niq": 33916, "epspxq": 2.18, "epsfxq": 2.14, "atq": 352583, "ltq": 279414, "ceqq": 73169, "oiadpq": 40370, "gpq": 54855, "cshoq": 15552, "prccq": 192.53, "saleq": 119575},
+    {"datadate": "2023-09-30", "fyearq": 2023, "fqtr": 4, "revtq": 89498, "niq": 22956, "epspxq": 1.46, "epsfxq": 1.43, "atq": 352755, "ltq": 290437, "ceqq": 62318, "oiadpq": 26970, "gpq": 40427, "cshoq": 15729, "prccq": 171.21, "saleq": 89498},
+    {"datadate": "2023-06-30", "fyearq": 2023, "fqtr": 3, "revtq": 81797, "niq": 19881, "epspxq": 1.26, "epsfxq": 1.24, "atq": 335038, "ltq": 274764, "ceqq": 60274, "oiadpq": 23213, "gpq": 36413, "cshoq": 15787, "prccq": 193.97, "saleq": 81797},
+    {"datadate": "2023-03-31", "fyearq": 2023, "fqtr": 2, "revtq": 94836, "niq": 24160, "epspxq": 1.52, "epsfxq": 1.49, "atq": 332160, "ltq": 274764, "ceqq": 57396, "oiadpq": 29415, "gpq": 42950, "cshoq": 15892, "prccq": 164.90, "saleq": 94836}
+  ],
+  "JPM": [
+    {"datadate": "2024-12-31", "fyearq": 2024, "fqtr": 4, "revtq": 43740, "niq": 14300, "epspxq": 4.81, "epsfxq": 4.74, "atq": 4003468, "ltq": 3694210, "ceqq": 309258, "oiadpq": 18950, "gpq": 43740, "cshoq": 2873, "prccq": 242.12, "saleq": 43740},
+    {"datadate": "2024-09-30", "fyearq": 2024, "fqtr": 3, "revtq": 42654, "niq": 12898, "epspxq": 4.37, "epsfxq": 4.30, "atq": 3963230, "ltq": 3658710, "ceqq": 304520, "oiadpq": 17100, "gpq": 42654, "cshoq": 2886, "prccq": 211.46, "saleq": 42654},
+    {"datadate": "2024-06-30", "fyearq": 2024, "fqtr": 2, "revtq": 50990, "niq": 18149, "epspxq": 6.12, "epsfxq": 6.01, "atq": 3920483, "ltq": 3622200, "ceqq": 298283, "oiadpq": 23600, "gpq": 50990, "cshoq": 2895, "prccq": 205.84, "saleq": 50990},
+    {"datadate": "2024-03-31", "fyearq": 2024, "fqtr": 1, "revtq": 41934, "niq": 13419, "epspxq": 4.44, "epsfxq": 4.36, "atq": 3896260, "ltq": 3602500, "ceqq": 293760, "oiadpq": 17800, "gpq": 41934, "cshoq": 2910, "prccq": 198.41, "saleq": 41934},
+    {"datadate": "2023-12-31", "fyearq": 2023, "fqtr": 4, "revtq": 38574, "niq": 9307, "epspxq": 3.04, "epsfxq": 2.99, "atq": 3875393, "ltq": 3586100, "ceqq": 289293, "oiadpq": 13200, "gpq": 38574, "cshoq": 2920, "prccq": 170.10, "saleq": 38574},
+    {"datadate": "2023-09-30", "fyearq": 2023, "fqtr": 3, "revtq": 39874, "niq": 13151, "epspxq": 4.33, "epsfxq": 4.25, "atq": 3898913, "ltq": 3612600, "ceqq": 286313, "oiadpq": 17400, "gpq": 39874, "cshoq": 2925, "prccq": 148.07, "saleq": 39874},
+    {"datadate": "2023-06-30", "fyearq": 2023, "fqtr": 2, "revtq": 41307, "niq": 14472, "epspxq": 4.75, "epsfxq": 4.67, "atq": 3868420, "ltq": 3583400, "ceqq": 285020, "oiadpq": 19100, "gpq": 41307, "cshoq": 2940, "prccq": 146.84, "saleq": 41307},
+    {"datadate": "2023-03-31", "fyearq": 2023, "fqtr": 1, "revtq": 38349, "niq": 12622, "epspxq": 4.10, "epsfxq": 4.02, "atq": 3744300, "ltq": 3461800, "ceqq": 282500, "oiadpq": 16700, "gpq": 38349, "cshoq": 2958, "prccq": 130.28, "saleq": 38349}
+  ],
+  "JNJ": [
+    {"datadate": "2024-12-31", "fyearq": 2024, "fqtr": 4, "revtq": 22521, "niq": 4053, "epspxq": 1.68, "epsfxq": 1.65, "atq": 187370, "ltq": 115200, "ceqq": 72170, "oiadpq": 6270, "gpq": 15680, "cshoq": 2414, "prccq": 145.90, "saleq": 22521},
+    {"datadate": "2024-09-30", "fyearq": 2024, "fqtr": 3, "revtq": 22471, "niq": 2694, "epspxq": 1.11, "epsfxq": 1.09, "atq": 185640, "ltq": 113800, "ceqq": 71840, "oiadpq": 4820, "gpq": 15430, "cshoq": 2418, "prccq": 161.76, "saleq": 22471},
+    {"datadate": "2024-06-30", "fyearq": 2024, "fqtr": 2, "revtq": 22447, "niq": 4687, "epspxq": 1.93, "epsfxq": 1.90, "atq": 183920, "ltq": 112600, "ceqq": 71320, "oiadpq": 6790, "gpq": 15620, "cshoq": 2422, "prccq": 146.48, "saleq": 22447},
+    {"datadate": "2024-03-31", "fyearq": 2024, "fqtr": 1, "revtq": 21383, "niq": 5351, "epspxq": 2.20, "epsfxq": 2.17, "atq": 182450, "ltq": 111800, "ceqq": 70650, "oiadpq": 7320, "gpq": 14960, "cshoq": 2426, "prccq": 156.72, "saleq": 21383},
+    {"datadate": "2023-12-31", "fyearq": 2023, "fqtr": 4, "revtq": 21395, "niq": 4055, "epspxq": 1.67, "epsfxq": 1.64, "atq": 186623, "ltq": 117218, "ceqq": 69405, "oiadpq": 5430, "gpq": 14550, "cshoq": 2430, "prccq": 156.74, "saleq": 21395},
+    {"datadate": "2023-09-30", "fyearq": 2023, "fqtr": 3, "revtq": 21351, "niq": 26028, "epspxq": 10.72, "epsfxq": 10.55, "atq": 185030, "ltq": 116700, "ceqq": 68330, "oiadpq": 5190, "gpq": 14380, "cshoq": 2434, "prccq": 155.22, "saleq": 21351},
+    {"datadate": "2023-06-30", "fyearq": 2023, "fqtr": 2, "revtq": 25530, "niq": 5144, "epspxq": 2.05, "epsfxq": 2.02, "atq": 188050, "ltq": 120300, "ceqq": 67750, "oiadpq": 6080, "gpq": 17260, "cshoq": 2438, "prccq": 165.31, "saleq": 25530},
+    {"datadate": "2023-03-31", "fyearq": 2023, "fqtr": 1, "revtq": 24746, "niq": 7067, "epspxq": 2.83, "epsfxq": 2.78, "atq": 187629, "ltq": 119100, "ceqq": 68529, "oiadpq": 7680, "gpq": 16870, "cshoq": 2442, "prccq": 163.29, "saleq": 24746}
+  ],
+  "XOM": [
+    {"datadate": "2024-12-31", "fyearq": 2024, "fqtr": 4, "revtq": 83434, "niq": 7390, "epspxq": 1.72, "epsfxq": 1.70, "atq": 396690, "ltq": 179240, "ceqq": 217450, "oiadpq": 12200, "gpq": 28700, "cshoq": 4215, "prccq": 105.50, "saleq": 83434},
+    {"datadate": "2024-09-30", "fyearq": 2024, "fqtr": 3, "revtq": 90019, "niq": 8610, "epspxq": 1.92, "epsfxq": 1.89, "atq": 397820, "ltq": 180900, "ceqq": 216920, "oiadpq": 13700, "gpq": 31450, "cshoq": 4230, "prccq": 117.24, "saleq": 90019},
+    {"datadate": "2024-06-30", "fyearq": 2024, "fqtr": 2, "revtq": 93060, "niq": 9240, "epspxq": 2.14, "epsfxq": 2.11, "atq": 389890, "ltq": 176400, "ceqq": 213490, "oiadpq": 14500, "gpq": 33200, "cshoq": 4248, "prccq": 111.83, "saleq": 93060},
+    {"datadate": "2024-03-31", "fyearq": 2024, "fqtr": 1, "revtq": 83083, "niq": 8220, "epspxq": 2.06, "epsfxq": 2.03, "atq": 386720, "ltq": 175100, "ceqq": 211620, "oiadpq": 13100, "gpq": 29400, "cshoq": 4260, "prccq": 118.34, "saleq": 83083},
+    {"datadate": "2023-12-31", "fyearq": 2023, "fqtr": 4, "revtq": 84344, "niq": 7630, "epspxq": 1.91, "epsfxq": 1.88, "atq": 376317, "ltq": 167650, "ceqq": 208667, "oiadpq": 12600, "gpq": 28300, "cshoq": 4270, "prccq": 99.63, "saleq": 84344},
+    {"datadate": "2023-09-30", "fyearq": 2023, "fqtr": 3, "revtq": 90762, "niq": 9070, "epspxq": 2.25, "epsfxq": 2.22, "atq": 382830, "ltq": 171400, "ceqq": 211430, "oiadpq": 14200, "gpq": 31800, "cshoq": 4280, "prccq": 108.40, "saleq": 90762},
+    {"datadate": "2023-06-30", "fyearq": 2023, "fqtr": 2, "revtq": 82914, "niq": 7880, "epspxq": 1.94, "epsfxq": 1.91, "atq": 369067, "ltq": 163300, "ceqq": 205767, "oiadpq": 12800, "gpq": 28900, "cshoq": 4290, "prccq": 107.16, "saleq": 82914},
+    {"datadate": "2023-03-31", "fyearq": 2023, "fqtr": 1, "revtq": 86564, "niq": 11430, "epspxq": 2.83, "epsfxq": 2.79, "atq": 365246, "ltq": 158900, "ceqq": 206346, "oiadpq": 16400, "gpq": 34700, "cshoq": 4300, "prccq": 109.68, "saleq": 86564}
+  ],
+  "WMT": [
+    {"datadate": "2024-12-31", "fyearq": 2025, "fqtr": 4, "revtq": 180550, "niq": 5492, "epspxq": 0.68, "epsfxq": 0.67, "atq": 260580, "ltq": 162300, "ceqq": 98280, "oiadpq": 8120, "gpq": 45140, "cshoq": 8068, "prccq": 91.16, "saleq": 180550},
+    {"datadate": "2024-09-30", "fyearq": 2025, "fqtr": 3, "revtq": 169588, "niq": 4710, "epspxq": 0.58, "epsfxq": 0.57, "atq": 258430, "ltq": 161200, "ceqq": 97230, "oiadpq": 6930, "gpq": 42060, "cshoq": 8072, "prccq": 82.50, "saleq": 169588},
+    {"datadate": "2024-06-30", "fyearq": 2025, "fqtr": 2, "revtq": 161630, "niq": 4711, "epspxq": 0.58, "epsfxq": 0.57, "atq": 255620, "ltq": 160400, "ceqq": 95220, "oiadpq": 7100, "gpq": 40400, "cshoq": 8076, "prccq": 68.83, "saleq": 161630},
+    {"datadate": "2024-03-31", "fyearq": 2025, "fqtr": 1, "revtq": 161510, "niq": 5307, "epspxq": 0.66, "epsfxq": 0.65, "atq": 253790, "ltq": 159800, "ceqq": 93990, "oiadpq": 7600, "gpq": 40510, "cshoq": 8080, "prccq": 60.14, "saleq": 161510},
+    {"datadate": "2023-12-31", "fyearq": 2024, "fqtr": 4, "revtq": 173389, "niq": 5494, "epspxq": 0.68, "epsfxq": 0.67, "atq": 252399, "ltq": 159200, "ceqq": 93199, "oiadpq": 7690, "gpq": 43350, "cshoq": 8084, "prccq": 52.14, "saleq": 173389},
+    {"datadate": "2023-09-30", "fyearq": 2024, "fqtr": 3, "revtq": 160804, "niq": 453, "epspxq": 0.06, "epsfxq": 0.06, "atq": 249980, "ltq": 158100, "ceqq": 91880, "oiadpq": 6300, "gpq": 39880, "cshoq": 8088, "prccq": 51.60, "saleq": 160804},
+    {"datadate": "2023-06-30", "fyearq": 2024, "fqtr": 2, "revtq": 161634, "niq": 7891, "epspxq": 0.97, "epsfxq": 0.96, "atq": 247570, "ltq": 157200, "ceqq": 90370, "oiadpq": 7600, "gpq": 40810, "cshoq": 8092, "prccq": 52.48, "saleq": 161634},
+    {"datadate": "2023-03-31", "fyearq": 2024, "fqtr": 1, "revtq": 152305, "niq": 1673, "epspxq": 0.21, "epsfxq": 0.20, "atq": 245140, "ltq": 155600, "ceqq": 89540, "oiadpq": 5620, "gpq": 37190, "cshoq": 8096, "prccq": 49.55, "saleq": 152305}
+  ]
+}

@@ -1,0 +1,71 @@
+"""
+FinAgent — Autonomous Equity Research Agent with Persistent Memory.
+
+Usage:
+    python main.py "Analyse AAPL's recent earnings and outlook"
+    python main.py --mock "Analyse AAPL's recent earnings and outlook"
+    python main.py --evaluate              # run full evaluation suite (mock)
+    python main.py --evaluate --live       # run full evaluation suite (live WRDS)
+"""
+from __future__ import annotations
+
+import argparse
+import logging
+import sys
+from pathlib import Path
+
+# Ensure project root on path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="FinAgent — Autonomous Equity Research Agent",
+    )
+    parser.add_argument("query", nargs="?", help="Research query, e.g. 'Analyse AAPL'")
+    parser.add_argument("--mock", action="store_true", default=True, help="Use mock data (default)")
+    parser.add_argument("--live", action="store_true", help="Use live WRDS data")
+    parser.add_argument("--evaluate", action="store_true", help="Run evaluation suite")
+    parser.add_argument("--ticker", type=str, help="Single ticker for evaluation")
+    parser.add_argument("-v", "--verbose", action="store_true")
+    args = parser.parse_args()
+
+    level = logging.DEBUG if args.verbose else logging.WARNING
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        datefmt="%H:%M:%S",
+    )
+
+    data_mode = "live" if args.live else "mock"
+
+    if args.evaluate:
+        from evaluation.runner import run_evaluation
+        tickers = [args.ticker.upper()] if args.ticker else None
+        run_evaluation(tickers=tickers, data_mode=data_mode)
+        return
+
+    if not args.query:
+        parser.print_help()
+        print("\nExample: python main.py \"Analyse AAPL's recent earnings and outlook\"")
+        sys.exit(1)
+
+    # Single research run
+    from agent.loop import run_agent
+    print(f"FinAgent — {data_mode.upper()} mode")
+    print(f"Query: {args.query}\n")
+
+    report, eval_rec = run_agent(args.query, data_mode=data_mode)
+
+    print("\n" + "=" * 70)
+    print("  RESEARCH REPORT")
+    print("=" * 70)
+    print(report)
+    print("=" * 70)
+    print(f"\nStats: {eval_rec.steps} steps, {len(eval_rec.tool_sequence)} tool calls, "
+          f"{eval_rec.total_tokens} tokens, {eval_rec.latency_seconds:.1f}s")
+    print(f"Tools used: {' -> '.join(eval_rec.tool_sequence)}")
+
+
+if __name__ == "__main__":
+    main()

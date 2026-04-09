@@ -1,0 +1,112 @@
+{
+  "AAPL": {
+    "actuals": [
+      {"ticker": "AAPL", "pends": "2024-12-31", "anndats": "2025-01-30", "actual_eps": 2.40, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2024-09-30", "anndats": "2024-10-31", "actual_eps": 1.64, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2024-06-30", "anndats": "2024-08-01", "actual_eps": 1.40, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2024-03-31", "anndats": "2024-05-02", "actual_eps": 1.53, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2023-12-31", "anndats": "2024-02-01", "actual_eps": 2.18, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2023-09-30", "anndats": "2023-11-02", "actual_eps": 1.46, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2023-06-30", "anndats": "2023-08-03", "actual_eps": 1.26, "measure": "EPS"},
+      {"ticker": "AAPL", "pends": "2023-03-31", "anndats": "2023-05-04", "actual_eps": 1.52, "measure": "EPS"}
+    ],
+    "estimates": [
+      {"ticker": "AAPL", "fpedats": "2024-12-31", "statpers": "2025-01-15", "meanest": 2.35, "medest": 2.36, "stdev": 0.07, "numest": 39, "actual": 2.40},
+      {"ticker": "AAPL", "fpedats": "2024-09-30", "statpers": "2024-10-15", "meanest": 1.60, "medest": 1.61, "stdev": 0.05, "numest": 38, "actual": 1.64},
+      {"ticker": "AAPL", "fpedats": "2024-06-30", "statpers": "2024-07-15", "meanest": 1.35, "medest": 1.35, "stdev": 0.06, "numest": 37, "actual": 1.40},
+      {"ticker": "AAPL", "fpedats": "2024-03-31", "statpers": "2024-04-15", "meanest": 1.50, "medest": 1.50, "stdev": 0.05, "numest": 36, "actual": 1.53},
+      {"ticker": "AAPL", "fpedats": "2023-12-31", "statpers": "2024-01-15", "meanest": 2.10, "medest": 2.11, "stdev": 0.06, "numest": 38, "actual": 2.18},
+      {"ticker": "AAPL", "fpedats": "2023-09-30", "statpers": "2023-10-15", "meanest": 1.39, "medest": 1.39, "stdev": 0.05, "numest": 36, "actual": 1.46},
+      {"ticker": "AAPL", "fpedats": "2023-06-30", "statpers": "2023-07-15", "meanest": 1.19, "medest": 1.20, "stdev": 0.05, "numest": 35, "actual": 1.26},
+      {"ticker": "AAPL", "fpedats": "2023-03-31", "statpers": "2023-04-15", "meanest": 1.43, "medest": 1.44, "stdev": 0.06, "numest": 36, "actual": 1.52}
+    ]
+  },
+  "JPM": {
+    "actuals": [
+      {"ticker": "JPM", "pends": "2024-12-31", "anndats": "2025-01-15", "actual_eps": 4.81, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2024-09-30", "anndats": "2024-10-11", "actual_eps": 4.37, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2024-06-30", "anndats": "2024-07-12", "actual_eps": 4.26, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2024-03-31", "anndats": "2024-04-12", "actual_eps": 4.44, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2023-12-31", "anndats": "2024-01-12", "actual_eps": 3.97, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2023-09-30", "anndats": "2023-10-13", "actual_eps": 4.33, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2023-06-30", "anndats": "2023-07-14", "actual_eps": 4.75, "measure": "EPS"},
+      {"ticker": "JPM", "pends": "2023-03-31", "anndats": "2023-04-14", "actual_eps": 4.10, "measure": "EPS"}
+    ],
+    "estimates": [
+      {"ticker": "JPM", "fpedats": "2024-12-31", "statpers": "2025-01-02", "meanest": 4.09, "medest": 4.11, "stdev": 0.30, "numest": 23, "actual": 4.81},
+      {"ticker": "JPM", "fpedats": "2024-09-30", "statpers": "2024-10-01", "meanest": 4.01, "medest": 4.00, "stdev": 0.28, "numest": 22, "actual": 4.37},
+      {"ticker": "JPM", "fpedats": "2024-06-30", "statpers": "2024-07-01", "meanest": 4.19, "medest": 4.20, "stdev": 0.32, "numest": 21, "actual": 4.26},
+      {"ticker": "JPM", "fpedats": "2024-03-31", "statpers": "2024-04-01", "meanest": 4.17, "medest": 4.15, "stdev": 0.29, "numest": 22, "actual": 4.44},
+      {"ticker": "JPM", "fpedats": "2023-12-31", "statpers": "2024-01-02", "meanest": 3.32, "medest": 3.35, "stdev": 0.35, "numest": 21, "actual": 3.97},
+      {"ticker": "JPM", "fpedats": "2023-09-30", "statpers": "2023-10-02", "meanest": 3.96, "medest": 3.95, "stdev": 0.30, "numest": 20, "actual": 4.33},
+      {"ticker": "JPM", "fpedats": "2023-06-30", "statpers": "2023-07-03", "meanest": 4.00, "medest": 4.02, "stdev": 0.33, "numest": 22, "actual": 4.75},
+      {"ticker": "JPM", "fpedats": "2023-03-31", "statpers": "2023-04-03", "meanest": 3.41, "medest": 3.40, "stdev": 0.31, "numest": 21, "actual": 4.10}
+    ]
+  },
+  "JNJ": {
+    "actuals": [
+      {"ticker": "JNJ", "pends": "2024-12-31", "anndats": "2025-01-22", "actual_eps": 2.04, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2024-09-30", "anndats": "2024-10-15", "actual_eps": 2.42, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2024-06-30", "anndats": "2024-07-17", "actual_eps": 2.82, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2024-03-31", "anndats": "2024-04-16", "actual_eps": 2.71, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2023-12-31", "anndats": "2024-01-23", "actual_eps": 2.29, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2023-09-30", "anndats": "2023-10-17", "actual_eps": 2.66, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2023-06-30", "anndats": "2023-07-20", "actual_eps": 2.05, "measure": "EPS"},
+      {"ticker": "JNJ", "pends": "2023-03-31", "anndats": "2023-04-18", "actual_eps": 1.70, "measure": "EPS"}
+    ],
+    "estimates": [
+      {"ticker": "JNJ", "fpedats": "2024-12-31", "statpers": "2025-01-08", "meanest": 1.99, "medest": 2.00, "stdev": 0.08, "numest": 19, "actual": 2.04},
+      {"ticker": "JNJ", "fpedats": "2024-09-30", "statpers": "2024-10-01", "meanest": 2.36, "medest": 2.37, "stdev": 0.09, "numest": 18, "actual": 2.42},
+      {"ticker": "JNJ", "fpedats": "2024-06-30", "statpers": "2024-07-02", "meanest": 2.74, "medest": 2.75, "stdev": 0.08, "numest": 19, "actual": 2.82},
+      {"ticker": "JNJ", "fpedats": "2024-03-31", "statpers": "2024-04-01", "meanest": 2.64, "medest": 2.65, "stdev": 0.07, "numest": 18, "actual": 2.71},
+      {"ticker": "JNJ", "fpedats": "2023-12-31", "statpers": "2024-01-08", "meanest": 2.28, "medest": 2.28, "stdev": 0.08, "numest": 19, "actual": 2.29},
+      {"ticker": "JNJ", "fpedats": "2023-09-30", "statpers": "2023-10-02", "meanest": 2.52, "medest": 2.53, "stdev": 0.09, "numest": 18, "actual": 2.66},
+      {"ticker": "JNJ", "fpedats": "2023-06-30", "statpers": "2023-07-05", "meanest": 1.98, "medest": 1.99, "stdev": 0.08, "numest": 19, "actual": 2.05},
+      {"ticker": "JNJ", "fpedats": "2023-03-31", "statpers": "2023-04-03", "meanest": 1.63, "medest": 1.64, "stdev": 0.08, "numest": 18, "actual": 1.70}
+    ]
+  },
+  "XOM": {
+    "actuals": [
+      {"ticker": "XOM", "pends": "2024-12-31", "anndats": "2025-01-31", "actual_eps": 1.76, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2024-09-30", "anndats": "2024-11-01", "actual_eps": 1.92, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2024-06-30", "anndats": "2024-08-02", "actual_eps": 2.14, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2024-03-31", "anndats": "2024-04-26", "actual_eps": 2.06, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2023-12-31", "anndats": "2024-02-02", "actual_eps": 2.48, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2023-09-30", "anndats": "2023-10-27", "actual_eps": 2.27, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2023-06-30", "anndats": "2023-07-28", "actual_eps": 1.94, "measure": "EPS"},
+      {"ticker": "XOM", "pends": "2023-03-31", "anndats": "2023-04-28", "actual_eps": 2.83, "measure": "EPS"}
+    ],
+    "estimates": [
+      {"ticker": "XOM", "fpedats": "2024-12-31", "statpers": "2025-01-15", "meanest": 1.79, "medest": 1.78, "stdev": 0.20, "numest": 23, "actual": 1.76},
+      {"ticker": "XOM", "fpedats": "2024-09-30", "statpers": "2024-10-15", "meanest": 1.88, "medest": 1.87, "stdev": 0.22, "numest": 22, "actual": 1.92},
+      {"ticker": "XOM", "fpedats": "2024-06-30", "statpers": "2024-07-15", "meanest": 2.23, "medest": 2.22, "stdev": 0.19, "numest": 24, "actual": 2.14},
+      {"ticker": "XOM", "fpedats": "2024-03-31", "statpers": "2024-04-12", "meanest": 2.20, "medest": 2.19, "stdev": 0.21, "numest": 23, "actual": 2.06},
+      {"ticker": "XOM", "fpedats": "2023-12-31", "statpers": "2024-01-15", "meanest": 2.38, "medest": 2.40, "stdev": 0.18, "numest": 22, "actual": 2.48},
+      {"ticker": "XOM", "fpedats": "2023-09-30", "statpers": "2023-10-13", "meanest": 2.35, "medest": 2.36, "stdev": 0.23, "numest": 23, "actual": 2.27},
+      {"ticker": "XOM", "fpedats": "2023-06-30", "statpers": "2023-07-14", "meanest": 1.97, "medest": 1.96, "stdev": 0.20, "numest": 22, "actual": 1.94},
+      {"ticker": "XOM", "fpedats": "2023-03-31", "statpers": "2023-04-14", "meanest": 2.60, "medest": 2.58, "stdev": 0.24, "numest": 24, "actual": 2.83}
+    ]
+  },
+  "WMT": {
+    "actuals": [
+      {"ticker": "WMT", "pends": "2024-12-31", "anndats": "2025-02-20", "actual_eps": 1.80, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2024-09-30", "anndats": "2024-11-19", "actual_eps": 1.74, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2024-06-30", "anndats": "2024-08-15", "actual_eps": 1.67, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2024-03-31", "anndats": "2024-05-16", "actual_eps": 1.63, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2023-12-31", "anndats": "2024-02-20", "actual_eps": 1.56, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2023-09-30", "anndats": "2023-11-16", "actual_eps": 1.53, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2023-06-30", "anndats": "2023-08-17", "actual_eps": 1.63, "measure": "EPS"},
+      {"ticker": "WMT", "pends": "2023-03-31", "anndats": "2023-05-18", "actual_eps": 1.60, "measure": "EPS"}
+    ],
+    "estimates": [
+      {"ticker": "WMT", "fpedats": "2024-12-31", "statpers": "2025-02-05", "meanest": 1.73, "medest": 1.74, "stdev": 0.06, "numest": 33, "actual": 1.80},
+      {"ticker": "WMT", "fpedats": "2024-09-30", "statpers": "2024-11-04", "meanest": 1.66, "medest": 1.67, "stdev": 0.05, "numest": 32, "actual": 1.74},
+      {"ticker": "WMT", "fpedats": "2024-06-30", "statpers": "2024-08-01", "meanest": 1.62, "medest": 1.62, "stdev": 0.06, "numest": 31, "actual": 1.67},
+      {"ticker": "WMT", "fpedats": "2024-03-31", "statpers": "2024-05-01", "meanest": 1.56, "medest": 1.57, "stdev": 0.05, "numest": 30, "actual": 1.63},
+      {"ticker": "WMT", "fpedats": "2023-12-31", "statpers": "2024-02-05", "meanest": 1.52, "medest": 1.52, "stdev": 0.06, "numest": 32, "actual": 1.56},
+      {"ticker": "WMT", "fpedats": "2023-09-30", "statpers": "2023-11-01", "meanest": 1.47, "medest": 1.48, "stdev": 0.06, "numest": 31, "actual": 1.53},
+      {"ticker": "WMT", "fpedats": "2023-06-30", "statpers": "2023-08-02", "meanest": 1.56, "medest": 1.57, "stdev": 0.05, "numest": 30, "actual": 1.63},
+      {"ticker": "WMT", "fpedats": "2023-03-31", "statpers": "2023-05-03", "meanest": 1.52, "medest": 1.53, "stdev": 0.06, "numest": 32, "actual": 1.60}
+    ]
+  }
+}

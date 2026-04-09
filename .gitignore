@@ -1,0 +1,27 @@
+# Credentials — NEVER commit
+.env
+
+# Agent output (evaluation results, reports)
+output/
+
+# Persistent memory store
+research_memory.json
+
+# WRDS data artifacts — subject to license restrictions
+*.parquet
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Mock data generator script (not needed in repo)
+mock_data/generate_*.py

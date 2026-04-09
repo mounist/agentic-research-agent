@@ -1,0 +1,262 @@
+{
+  "35": [
+    {
+      "gvkey": "012141",
+      "conm": "MICROSOFT CORP",
+      "tic": "MSFT",
+      "revtq": 56189.0,
+      "niq": 21870.0,
+      "epspxq": 2.93,
+      "prccq": 378.50,
+      "cshoq": 7432.0
+    },
+    {
+      "gvkey": "025570",
+      "conm": "DELL TECHNOLOGIES INC",
+      "tic": "DELL",
+      "revtq": 22244.0,
+      "niq": 1065.0,
+      "epspxq": 1.47,
+      "prccq": 112.30,
+      "cshoq": 726.0
+    },
+    {
+      "gvkey": "007600",
+      "conm": "HP INC",
+      "tic": "HPQ",
+      "revtq": 13195.0,
+      "niq": 858.0,
+      "epspxq": 0.86,
+      "prccq": 30.15,
+      "cshoq": 1005.0
+    },
+    {
+      "gvkey": "006066",
+      "conm": "INTERNATIONAL BUSINESS MACHINES CORP",
+      "tic": "IBM",
+      "revtq": 14462.0,
+      "niq": 1704.0,
+      "epspxq": 1.85,
+      "prccq": 162.45,
+      "cshoq": 918.0
+    },
+    {
+      "gvkey": "023420",
+      "conm": "CISCO SYSTEMS INC",
+      "tic": "CSCO",
+      "revtq": 12792.0,
+      "niq": 2634.0,
+      "epspxq": 0.65,
+      "prccq": 49.80,
+      "cshoq": 4050.0
+    }
+  ],
+  "60": [
+    {
+      "gvkey": "001447",
+      "conm": "BANK OF AMERICA CORP",
+      "tic": "BAC",
+      "revtq": 25320.0,
+      "niq": 7104.0,
+      "epspxq": 0.90,
+      "prccq": 35.20,
+      "cshoq": 7920.0
+    },
+    {
+      "gvkey": "008007",
+      "conm": "WELLS FARGO & CO",
+      "tic": "WFC",
+      "revtq": 20530.0,
+      "niq": 4910.0,
+      "epspxq": 1.33,
+      "prccq": 48.75,
+      "cshoq": 3690.0
+    },
+    {
+      "gvkey": "003243",
+      "conm": "CITIGROUP INC",
+      "tic": "C",
+      "revtq": 19440.0,
+      "niq": 3218.0,
+      "epspxq": 1.65,
+      "prccq": 53.40,
+      "cshoq": 1940.0
+    },
+    {
+      "gvkey": "013185",
+      "conm": "GOLDMAN SACHS GROUP INC",
+      "tic": "GS",
+      "revtq": 12490.0,
+      "niq": 2780.0,
+      "epspxq": 8.10,
+      "prccq": 385.60,
+      "cshoq": 343.0
+    },
+    {
+      "gvkey": "014058",
+      "conm": "MORGAN STANLEY",
+      "tic": "MS",
+      "revtq": 13280.0,
+      "niq": 2650.0,
+      "epspxq": 1.63,
+      "prccq": 92.10,
+      "cshoq": 1625.0
+    }
+  ],
+  "28": [
+    {
+      "gvkey": "008299",
+      "conm": "PFIZER INC",
+      "tic": "PFE",
+      "revtq": 14430.0,
+      "niq": 2120.0,
+      "epspxq": 0.37,
+      "prccq": 27.85,
+      "cshoq": 5632.0
+    },
+    {
+      "gvkey": "007257",
+      "conm": "MERCK & CO INC",
+      "tic": "MRK",
+      "revtq": 15920.0,
+      "niq": 4510.0,
+      "epspxq": 1.77,
+      "prccq": 118.40,
+      "cshoq": 2535.0
+    },
+    {
+      "gvkey": "179418",
+      "conm": "ABBVIE INC",
+      "tic": "ABBV",
+      "revtq": 13860.0,
+      "niq": 3240.0,
+      "epspxq": 1.83,
+      "prccq": 174.60,
+      "cshoq": 1768.0
+    },
+    {
+      "gvkey": "006730",
+      "conm": "ELI LILLY AND CO",
+      "tic": "LLY",
+      "revtq": 9350.0,
+      "niq": 1890.0,
+      "epspxq": 2.00,
+      "prccq": 582.30,
+      "cshoq": 946.0
+    },
+    {
+      "gvkey": "002403",
+      "conm": "BRISTOL-MYERS SQUIBB CO",
+      "tic": "BMY",
+      "revtq": 11235.0,
+      "niq": 1890.0,
+      "epspxq": 0.93,
+      "prccq": 51.70,
+      "cshoq": 2030.0
+    }
+  ],
+  "29": [
+    {
+      "gvkey": "002621",
+      "conm": "CHEVRON CORP",
+      "tic": "CVX",
+      "revtq": 49560.0,
+      "niq": 5480.0,
+      "epspxq": 2.90,
+      "prccq": 157.25,
+      "cshoq": 1890.0
+    },
+    {
+      "gvkey": "003806",
+      "conm": "CONOCOPHILLIPS",
+      "tic": "COP",
+      "revtq": 14130.0,
+      "niq": 2830.0,
+      "epspxq": 2.39,
+      "prccq": 115.40,
+      "cshoq": 1184.0
+    },
+    {
+      "gvkey": "005765",
+      "conm": "VALERO ENERGY CORP",
+      "tic": "VLO",
+      "revtq": 33020.0,
+      "niq": 1250.0,
+      "epspxq": 3.56,
+      "prccq": 133.80,
+      "cshoq": 351.0
+    },
+    {
+      "gvkey": "177513",
+      "conm": "MARATHON PETROLEUM CORP",
+      "tic": "MPC",
+      "revtq": 36450.0,
+      "niq": 1540.0,
+      "epspxq": 4.18,
+      "prccq": 153.90,
+      "cshoq": 368.0
+    },
+    {
+      "gvkey": "183160",
+      "conm": "PHILLIPS 66",
+      "tic": "PSX",
+      "revtq": 38340.0,
+      "niq": 1180.0,
+      "epspxq": 2.72,
+      "prccq": 112.60,
+      "cshoq": 434.0
+    }
+  ],
+  "53": [
+    {
+      "gvkey": "003813",
+      "conm": "TARGET CORP",
+      "tic": "TGT",
+      "revtq": 25320.0,
+      "niq": 971.0,
+      "epspxq": 2.10,
+      "prccq": 138.50,
+      "cshoq": 462.0
+    },
+    {
+      "gvkey": "003480",
+      "conm": "COSTCO WHOLESALE CORP",
+      "tic": "COST",
+      "revtq": 57390.0,
+      "niq": 1680.0,
+      "epspxq": 3.78,
+      "prccq": 567.40,
+      "cshoq": 444.0
+    },
+    {
+      "gvkey": "147752",
+      "conm": "DOLLAR GENERAL CORP",
+      "tic": "DG",
+      "revtq": 9694.0,
+      "niq": 416.0,
+      "epspxq": 1.89,
+      "prccq": 132.10,
+      "cshoq": 220.0
+    },
+    {
+      "gvkey": "006182",
+      "conm": "KROGER CO",
+      "tic": "KR",
+      "revtq": 34230.0,
+      "niq": 635.0,
+      "epspxq": 0.88,
+      "prccq": 47.25,
+      "cshoq": 722.0
+    },
+    {
+      "gvkey": "184260",
+      "conm": "BJS WHOLESALE CLUB HOLDINGS INC",
+      "tic": "BJ",
+      "revtq": 4740.0,
+      "niq": 118.0,
+      "epspxq": 0.88,
+      "prccq": 72.30,
+      "cshoq": 134.0
+    }
+  ]
+}

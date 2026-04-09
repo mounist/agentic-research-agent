@@ -1,0 +1,32 @@
+{
+  "AAPL": {
+    "gvkey": "001690",
+    "conm": "APPLE INC",
+    "sic": "3571",
+    "naics": "334111"
+  },
+  "JPM": {
+    "gvkey": "004297",
+    "conm": "JPMORGAN CHASE & CO",
+    "sic": "6020",
+    "naics": "522110"
+  },
+  "JNJ": {
+    "gvkey": "004010",
+    "conm": "JOHNSON & JOHNSON",
+    "sic": "2834",
+    "naics": "325412"
+  },
+  "XOM": {
+    "gvkey": "003255",
+    "conm": "EXXON MOBIL CORP",
+    "sic": "2911",
+    "naics": "324110"
+  },
+  "WMT": {
+    "gvkey": "011259",
+    "conm": "WALMART INC",
+    "sic": "5311",
+    "naics": "452210"
+  }
+}
