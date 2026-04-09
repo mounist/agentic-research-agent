@@ -7,6 +7,30 @@ from typing import Any
 from agent.models import EvalRecord
 
 
+def validate_report_structure(report: str) -> dict[str, Any]:
+    """Check that a report has the required structural elements."""
+    import re
+    has_recommendation = bool(
+        re.search(r"\b(BUY|SELL|HOLD)\b", report[:800], re.IGNORECASE)
+    )
+    has_confidence = bool(
+        re.search(r"confidence[:\s*]+\d", report, re.IGNORECASE)
+    )
+    has_risk_section = bool(
+        re.search(r"risk", report, re.IGNORECASE)
+    )
+    has_min_content = len(report) >= 500
+
+    return {
+        "has_recommendation": has_recommendation,
+        "has_confidence": has_confidence,
+        "has_risk_section": has_risk_section,
+        "has_min_content": has_min_content,
+        "report_length": len(report),
+        "is_valid": all([has_recommendation, has_confidence, has_risk_section, has_min_content]),
+    }
+
+
 def compute_summary(records: list[EvalRecord]) -> dict[str, Any]:
     """Compute aggregate metrics from a list of eval records."""
     if not records:
@@ -42,6 +66,14 @@ def compute_summary(records: list[EvalRecord]) -> dict[str, Any]:
         },
         "recommendations": dict(Counter(r.recommendation for r in first_runs)),
     }
+
+    # Report structure validation
+    validations = {}
+    for r in records:
+        v = validate_report_structure(r.final_report)
+        validations[f"{r.ticker}_{r.run_label}"] = v
+    summary["report_validations"] = validations
+    summary["all_reports_valid"] = all(v["is_valid"] for v in validations.values())
 
     # Tool usage distribution
     all_tools = []

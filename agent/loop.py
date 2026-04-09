@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from typing import Any
 
 import anthropic
@@ -20,6 +21,55 @@ from tools.registry import dispatch
 import config
 
 logger = logging.getLogger(__name__)
+
+TOOL_BUDGET_NUDGE = (
+    "You have already called {n} distinct tools this run. Consider whether "
+    "you have enough data to write your report now. Only call additional "
+    "tools if critically needed."
+)
+_TOOL_BUDGET_THRESHOLD = 7
+
+
+def _call_claude_with_retry(
+    client: anthropic.Anthropic,
+    *,
+    model: str,
+    max_tokens: int,
+    system: str,
+    tools: list[dict],
+    messages: list[dict],
+    max_retries: int = 3,
+) -> Any:
+    """Call Claude with exponential backoff for transient errors."""
+    for attempt in range(max_retries + 1):
+        try:
+            return client.messages.create(
+                model=model,
+                max_tokens=max_tokens,
+                system=system,
+                tools=tools,
+                messages=messages,
+            )
+        except anthropic.RateLimitError as e:
+            if attempt == max_retries:
+                raise
+            wait = 2 ** attempt
+            logger.warning(f"Rate limited, retrying in {wait}s (attempt {attempt + 1})")
+            time.sleep(wait)
+        except anthropic.APIStatusError as e:
+            if e.status_code >= 500 and attempt < max_retries:
+                wait = 2 ** attempt
+                logger.warning(f"Server error {e.status_code}, retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
+        except anthropic.APIConnectionError as e:
+            if attempt < max_retries:
+                wait = 2 ** attempt
+                logger.warning(f"Connection error, retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def run_agent(query: str, data_mode: str = "mock") -> tuple[str, EvalRecord]:
@@ -45,8 +95,17 @@ def run_agent(query: str, data_mode: str = "mock") -> tuple[str, EvalRecord]:
         if state.iteration == config.MAX_ITERATIONS:
             messages.append({"role": "user", "content": FORCE_REPORT_PROMPT})
 
-        # Call Claude
-        response = client.messages.create(
+        # Tool budget nudge: if 7+ unique tools used, inject a soft reminder
+        unique_tools = set(eval_rec.tool_sequence)
+        if (
+            len(unique_tools) >= _TOOL_BUDGET_THRESHOLD
+            and state.iteration < config.MAX_ITERATIONS
+        ):
+            messages.append({"role": "user", "content": TOOL_BUDGET_NUDGE.format(n=len(unique_tools))})
+
+        # Call Claude with retry
+        response = _call_claude_with_retry(
+            client,
             model=config.AGENT_MODEL,
             max_tokens=config.MAX_TOKENS,
             system=SYSTEM_PROMPT,

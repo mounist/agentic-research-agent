@@ -232,3 +232,24 @@ The agent pulled only time-sensitive data (prices, latest earnings) and skipped 
 5. **Claude for sentiment.** Transcript analysis uses Claude (not FinBERT), enabling nuanced qualitative judgment with structured JSON output.
 
 6. **Max iteration safety.** Configurable `MAX_ITERATIONS` (default 15). If reached, Claude is forced to synthesise a report from whatever it has.
+
+7. **Tool budget guardrail.** After 7+ unique tools in a single run, a soft nudge is injected reminding the agent to consider wrapping up. Not a hard limit — just code-level awareness.
+
+8. **Retry with backoff.** Claude API calls in both the agent loop and sentiment tool use exponential backoff (3 retries) for rate limits, timeouts, and 5xx errors.
+
+## Testing
+
+40 unit tests covering all critical paths:
+
+```bash
+pip install pytest
+pytest tests/ -v
+```
+
+| Test file | Tests | Covers |
+|-----------|-------|--------|
+| `test_extraction.py` | 13 | Recommendation/confidence parsing, XOM edge case |
+| `test_loop.py` | 8 | Agent loop with mocked Claude, budget nudge, max iterations |
+| `test_memory.py` | 7 | Store CRUD, upsert, sector query, case insensitivity |
+| `test_registry.py` | 5 | Tool dispatch, unknown tools, memory roundtrip |
+| `test_report_validation.py` | 7 | Report structure checks (rec, confidence, risk, length) |

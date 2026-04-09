@@ -3,7 +3,10 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from typing import Any
+
+import anthropic
 
 from agent.models import ToolResult
 import config
@@ -28,6 +31,34 @@ Return ONLY the JSON object, no other text.
 """
 
 
+def _call_with_retry(client: anthropic.Anthropic, **kwargs: Any) -> Any:
+    """Call Claude with exponential backoff for transient errors."""
+    max_retries = 3
+    for attempt in range(max_retries + 1):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.RateLimitError:
+            if attempt == max_retries:
+                raise
+            wait = 2 ** attempt
+            logger.warning(f"Sentiment rate limited, retrying in {wait}s")
+            time.sleep(wait)
+        except anthropic.APIStatusError as e:
+            if e.status_code >= 500 and attempt < max_retries:
+                wait = 2 ** attempt
+                logger.warning(f"Sentiment server error {e.status_code}, retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
+        except anthropic.APIConnectionError:
+            if attempt < max_retries:
+                wait = 2 ** attempt
+                logger.warning(f"Sentiment connection error, retrying in {wait}s")
+                time.sleep(wait)
+            else:
+                raise
+
+
 def analyze_text_sentiment(
     text: str = "",
     context: str = "",
@@ -49,13 +80,14 @@ def analyze_text_sentiment(
     if len(text) > 12000:
         text = text[:12000] + "\n[truncated]"
 
+    raw = ""
     try:
-        import anthropic
         client = anthropic.Anthropic(api_key=config.ANTHROPIC_API_KEY)
 
         user_msg = f"Context: {context}\n\nTranscript:\n{text}" if context else text
 
-        response = client.messages.create(
+        response = _call_with_retry(
+            client,
             model=config.SENTIMENT_MODEL,
             max_tokens=1024,
             system=_SENTIMENT_PROMPT,
@@ -84,7 +116,7 @@ def analyze_text_sentiment(
             data={
                 "overall_sentiment": "unknown",
                 "confidence": 0.0,
-                "raw_response": raw if "raw" in dir() else "",
+                "raw_response": raw,
                 "parse_error": str(e),
             },
         )
