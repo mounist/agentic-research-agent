@@ -98,8 +98,34 @@ def query_ciq_transcript(ticker: str, quarter: str | None = None) -> pd.DataFram
     ticker_data = data.get(ticker.upper())
     if not ticker_data:
         return pd.DataFrame()
-    # Return as single-row with concatenated text
-    return pd.DataFrame([ticker_data])
+
+    # Legacy single-dict format (backwards compat)
+    if isinstance(ticker_data, dict):
+        return pd.DataFrame([ticker_data])
+
+    # New multi-quarter list format
+    if quarter:
+        match = [q for q in ticker_data if q.get("quarter") == quarter]
+        if not match:
+            return pd.DataFrame()
+        row = dict(match[0])
+    else:
+        # Most recent = last in list (generator writes chronologically)
+        row = dict(sorted(ticker_data, key=lambda q: q.get("transcriptdate", ""))[-1])
+
+    row.setdefault("fiscal_quarter", row.get("quarter", "unknown"))
+    return pd.DataFrame([row])
+
+
+def query_all_transcripts(ticker: str) -> list[dict[str, Any]]:
+    """Return all quarters of transcripts for `ticker` (used for RAG indexing)."""
+    data = _load_fixture("transcripts")
+    ticker_data = data.get(ticker.upper())
+    if not ticker_data:
+        return []
+    if isinstance(ticker_data, dict):
+        return [ticker_data]
+    return list(ticker_data)
 
 
 def resolve_ticker_to_permno(ticker: str) -> int | None:

@@ -72,6 +72,17 @@ Call calculate_quant_signals only if you pulled price data.  \
 Call analyze_text_sentiment only if you pulled a transcript AND there is \
 something worth analysing (earnings surprise, guidance change, etc.).
 
+## Transcript tools — choose the right one
+
+For multi-quarter qualitative analysis (margin trajectory, management tone \
+shifts, strategic pivots, guidance evolution across several quarters), use \
+`search_transcript_passages`, which runs semantic search across 8 quarters \
+of transcript history and returns only the most relevant chunks with quarter \
+and section metadata.  For reading a single full transcript end-to-end \
+(e.g. to dissect one specific earnings call or pipe text into sentiment \
+analysis), use `get_earnings_transcript`.  Choose based on your research \
+question.  Neither is mandatory.
+
 ## Step 4: Save and report
 
 Call save_research_memory, then write your final report.
@@ -194,6 +205,36 @@ TOOL_SCHEMAS: list[dict] = [
                 },
             },
             "required": ["ticker"],
+        },
+    },
+    {
+        "name": "search_transcript_passages",
+        "description": (
+            "Semantic search across 8 quarters (2023Q1-2024Q4) of earnings "
+            "call transcripts for a ticker. Returns the top-k most relevant "
+            "passages with quarter + section metadata. Use for multi-quarter "
+            "qualitative questions — margin trajectory, tone shifts, strategic "
+            "pivot evolution, guidance changes over time. Preferred over "
+            "get_earnings_transcript when the question spans multiple quarters "
+            "or asks how commentary has evolved."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "ticker": {"type": "string", "description": "Stock ticker"},
+                "query": {
+                    "type": "string",
+                    "description": (
+                        "Natural language query, e.g. 'management commentary "
+                        "on margin trends over recent quarters'."
+                    ),
+                },
+                "top_k": {
+                    "type": "integer",
+                    "description": "How many passages to return (default 5, max 15).",
+                },
+            },
+            "required": ["ticker", "query"],
         },
     },
     {

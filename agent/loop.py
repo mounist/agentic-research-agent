@@ -182,6 +182,10 @@ def run_agent(query: str, data_mode: str = "mock") -> tuple[str, EvalRecord]:
 def _extract_ticker(query: str) -> str:
     """Best-effort ticker extraction from a natural language query."""
     import re
+    # Prefer an explicit parenthesized ticker, e.g. "J&J's (JNJ)" -> JNJ.
+    paren = re.search(r"\(([A-Z]{1,5})\)", query)
+    if paren:
+        return paren.group(1)
     # Look for uppercase 1-5 letter words that look like tickers
     tokens = re.findall(r"\b([A-Z]{1,5})\b", query)
     # Filter out common English words

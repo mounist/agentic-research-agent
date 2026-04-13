@@ -21,7 +21,7 @@ This project demonstrates genuine agentic behavior: adaptive tool selection base
 │                               │                                      │
 │  ┌────────────────────────────▼───────────────────────────────────┐  │
 │  │  Claude API call (tool_use mode)                               │  │
-│  │  Input: system prompt + conversation history + 9 tool schemas  │  │
+│  │  Input: system prompt + conversation history + 10 tool schemas │  │
 │  │  Output: tool_use blocks OR final text report                  │  │
 │  └────────────────────────────┬───────────────────────────────────┘  │
 │                               │                                      │
@@ -43,19 +43,59 @@ This project demonstrates genuine agentic behavior: adaptive tool selection base
                             │
                             ▼
               ┌──────────────────────────┐
-              │   9 Available Tools      │
+              │  10 Available Tools      │
               ├──────────────────────────┤
               │ get_price_data     (CRSP)│
               │ get_fundamentals  (Comp) │
               │ get_earnings_data (IBES) │
               │ get_sector_peers  (Comp) │
               │ get_earnings_transcript  │
+              │ search_transcript_       │
+              │   passages   (RAG)       │
               │ analyze_text_sentiment   │
               │ calculate_quant_signals  │
               │ query_research_memory    │
               │ save_research_memory     │
               └──────────────────────────┘
 ```
+
+### RAG — multi-quarter transcript retrieval
+
+For multi-quarter qualitative questions ("how has management's margin
+commentary evolved?", "track the China narrative across recent calls"), the
+agent has semantic search over a persistent vector index of 5 tickers × 8
+quarters (2023Q1–2024Q4) of realistic earnings call transcripts.
+
+```
+mock_data/transcripts.json   (5 tickers × 8 quarters, ~3.2k words each,
+                              each quarter on a distinct theme)
+        │
+        ▼  rag/indexer.py
+   section-aware chunking (Opening / CEO / CFO / Segment / Q&A),
+   ~120–450 words per chunk
+        │
+        ▼  sentence-transformers (all-MiniLM-L6-v2, 384-dim)
+        ▼
+   ChromaDB persistent store at mock_data/chroma_db/
+   metadata: {ticker, quarter, section, chunk_index}
+        │
+        ▼  rag/retriever.py
+   search_transcript_passages tool  (ticker, query, top_k)
+        →  ranked chunks with quarter + section tags
+```
+
+Each (ticker, quarter) covers a *distinct* theme so semantic queries return
+meaningfully different chunks — AAPL 2023Q1 is Vision Pro, 2023Q4 is China
+/ Huawei; JPM 2023Q1 is the SVB crisis, 2023Q2 is the First Republic
+acquisition; similarly diverse for JNJ, XOM, WMT.
+
+Build or rebuild the index with:
+
+```bash
+python main.py --index-transcripts
+```
+
+The first normal mock run will auto-build the index if it does not exist.
 
 ### Project Structure
 
@@ -71,17 +111,22 @@ agentic_research_agent/
 │   ├── prompts.py                # System prompt + tool schemas
 │   └── models.py                 # AgentState, ToolResult, EvalRecord
 │
-├── tools/                        # 9 callable tools
+├── tools/                        # 10 callable tools
 │   ├── registry.py               # Name → function dispatch
 │   ├── price_data.py             # CRSP daily prices/returns
 │   ├── fundamentals.py           # Compustat quarterly fundamentals
 │   ├── earnings_data.py          # IBES actuals vs estimates
 │   ├── sector_peers.py           # Same-SIC peer comparison
 │   ├── earnings_transcript.py    # Capital IQ transcript text
+│   ├── search_transcript_passages.py  # RAG semantic search over 8 quarters
 │   ├── sentiment.py              # Claude-based transcript analysis
 │   ├── quant_signals.py          # Momentum, SUE, profitability
 │   ├── memory_query.py           # Read persistent memory
 │   └── memory_save.py            # Write persistent memory
+│
+├── rag/                          # Multi-quarter transcript retrieval
+│   ├── indexer.py                # Section-aware chunking + ChromaDB persistence
+│   └── retriever.py              # Semantic search with ticker filter
 │
 ├── data/                         # Data access layer
 │   ├── wrds_client.py            # Live WRDS (all SQL in one file)
@@ -94,9 +139,10 @@ agentic_research_agent/
 │   ├── price_data.json           # 2 years daily prices
 │   ├── fundamentals.json         # 8 quarters per ticker
 │   ├── earnings_data.json        # IBES actuals + estimates
-│   ├── transcripts.json          # Earnings call excerpts
+│   ├── transcripts.json          # 40 multi-quarter earnings call transcripts (5 tickers × 8 quarters, ~130K words total)
 │   ├── company_info.json         # SIC codes
-│   └── sector_peers.json         # Peer companies
+│   ├── sector_peers.json         # Peer companies
+│   └── chroma_db/                # Persistent RAG vector store (gitignored)
 │
 └── evaluation/
     ├── runner.py                 # Batch eval across tickers

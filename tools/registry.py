@@ -20,6 +20,7 @@ def _register() -> None:
     from tools.earnings_data import get_earnings_data
     from tools.sector_peers import get_sector_peers
     from tools.earnings_transcript import get_earnings_transcript
+    from tools.search_transcript_passages import search_transcript_passages
     from tools.sentiment import analyze_text_sentiment
     from tools.quant_signals import calculate_quant_signals
     from tools.memory_query import query_research_memory
@@ -31,6 +32,7 @@ def _register() -> None:
         "get_earnings_data": get_earnings_data,
         "get_sector_peers": get_sector_peers,
         "get_earnings_transcript": get_earnings_transcript,
+        "search_transcript_passages": search_transcript_passages,
         "analyze_text_sentiment": analyze_text_sentiment,
         "calculate_quant_signals": calculate_quant_signals,
         "query_research_memory": query_research_memory,

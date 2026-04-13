@@ -27,6 +27,11 @@ def main() -> None:
     parser.add_argument("--live", action="store_true", help="Use live WRDS data")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation suite")
     parser.add_argument("--ticker", type=str, help="Single ticker for evaluation")
+    parser.add_argument(
+        "--index-transcripts",
+        action="store_true",
+        help="Build (or rebuild) the RAG vector index over mock transcripts, then exit.",
+    )
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -38,6 +43,23 @@ def main() -> None:
     )
 
     data_mode = "live" if args.live else "mock"
+
+    if args.index_transcripts:
+        from rag.indexer import build_index
+        print("Building RAG transcript index...")
+        n = build_index(rebuild=True)
+        print(f"Indexed {n} chunks.")
+        return
+
+    # Auto-build index on first run if missing (mock mode only)
+    if data_mode == "mock":
+        try:
+            from rag.indexer import index_exists, build_index
+            if not index_exists():
+                print("RAG index not found — building on first run (this takes ~30s)...")
+                build_index()
+        except ImportError:
+            pass  # RAG deps optional; tool will surface error if invoked
 
     if args.evaluate:
         from evaluation.runner import run_evaluation

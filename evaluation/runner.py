@@ -36,9 +36,11 @@ EVAL_TICKERS: list[str] = [
 ]
 
 EVAL_QUERIES: dict[str, str] = {
-    "AAPL": "Analyse Apple (AAPL): recent earnings performance, price momentum, and outlook. Should I buy, hold, or sell?",
-    "JPM": "Analyse JPMorgan Chase (JPM): credit quality, earnings trends, and valuation. Provide a recommendation.",
-    "JNJ": "Analyse Johnson & Johnson (JNJ): pharmaceutical pipeline strength, margin trends, and risk factors.",
+    # Multi-quarter thematic queries — should naturally trigger search_transcript_passages
+    "AAPL": "How has Apple's (AAPL) margin trajectory and management tone on China shifted over the past 2 years? Provide a recommendation.",
+    "JPM": "Trace JPMorgan's (JPM) evolving stance on credit risk and commercial real estate exposure from 2023 through 2024. Should I buy, hold, or sell?",
+    "JNJ": "How has J&J's (JNJ) pharmaceutical pipeline narrative and post-Kenvue strategy evolved across recent earnings calls? Provide a recommendation.",
+    # Standard single-quarter analyses — test that the agent does NOT over-use RAG when not needed
     "XOM": "Analyse Exxon Mobil (XOM): production trends, earnings volatility, and whether the stock is fairly valued.",
     "WMT": "Analyse Walmart (WMT): e-commerce growth, margin expansion, and competitive positioning.",
 }

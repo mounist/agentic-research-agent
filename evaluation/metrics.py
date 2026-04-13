@@ -86,6 +86,18 @@ def compute_summary(records: list[EvalRecord]) -> dict[str, Any]:
         r.ticker: r.tool_sequence for r in first_runs
     }
 
+    # RAG tool usage: how many first-runs used search_transcript_passages?
+    rag_users = [r for r in first_runs if "search_transcript_passages" in r.tool_sequence]
+    summary["rag_usage"] = {
+        "n_runs_using_rag": len(rag_users),
+        "total_runs": len(first_runs),
+        "rag_usage_rate": round(len(rag_users) / max(len(first_runs), 1), 2),
+        "total_rag_calls": sum(
+            r.tool_sequence.count("search_transcript_passages") for r in first_runs
+        ),
+        "tickers_using_rag": [r.ticker for r in rag_users],
+    }
+
     # Path diversity: how many unique tool sequences?
     unique_seqs = set(tuple(r.tool_sequence) for r in first_runs)
     summary["path_diversity"] = {
@@ -140,6 +152,14 @@ def print_summary(records: list[EvalRecord], summary: dict[str, Any]) -> None:
           f"median={s['tokens']['median']:.0f}")
     print(f"  Latency: mean={s['latency_seconds']['mean']:.1f}s, "
           f"median={s['latency_seconds']['median']:.1f}s")
+
+    # RAG usage
+    ru = s.get("rag_usage", {})
+    print(f"\n--- RAG Tool Usage (search_transcript_passages) ---")
+    print(f"  {ru.get('n_runs_using_rag', 0)}/{ru.get('total_runs', 0)} runs used RAG "
+          f"({ru.get('rag_usage_rate', 0):.0%}), total {ru.get('total_rag_calls', 0)} calls")
+    if ru.get("tickers_using_rag"):
+        print(f"  Tickers using RAG: {ru['tickers_using_rag']}")
 
     # Path diversity
     pd = s.get("path_diversity", {})
