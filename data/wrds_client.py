@@ -269,8 +269,17 @@ def query_all_transcripts(ticker: str, n_quarters: int = 8) -> list[dict[str, An
     if tid_df.empty:
         return []
 
+    # Keep only the latest transcript per quarter to avoid duplicate chunk IDs
+    # downstream (rescheduled / amended calls can share a quarter bucket).
+    tid_df = tid_df.drop_duplicates(subset=["transcriptid"])
+    tid_df = tid_df.sort_values("transcriptdate")
+    tid_df["_quarter"] = tid_df["transcriptdate"].apply(
+        lambda d: (lambda t: f"{t.year}Q{((t.month - 1) // 3) + 1}")(pd.Timestamp(d))
+    )
+    tid_df = tid_df.drop_duplicates(subset=["_quarter"], keep="last")
+
     records: list[dict[str, Any]] = []
-    for _, row in tid_df.sort_values("transcriptdate").iterrows():
+    for _, row in tid_df.iterrows():
         tid = int(row["transcriptid"])
         comp_df = db.raw_sql(
             "SELECT componentorder, componenttext FROM ciq.ciqtranscriptcomponent "

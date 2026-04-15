@@ -123,13 +123,16 @@ def _chunk_section(section_text: str) -> list[str]:
 def _iter_chunks(ticker: str, quarters: list[dict], data_mode: str = "mock") -> Iterable[dict]:
     for q in quarters:
         quarter = q.get("quarter", "unknown")
+        tid = q.get("transcriptid")
         text = q.get("text", "") or q.get("componenttext", "")
         if not text:
             continue
+        uid = str(tid) if tid is not None else quarter
+        global_i = 0
         for section_name, section_text in _split_sections(text, data_mode=data_mode):
             for i, chunk in enumerate(_chunk_section(section_text)):
                 yield {
-                    "id": f"{ticker}_{quarter}_{section_name.replace(' ', '_')}_{i}",
+                    "id": f"{ticker}_{quarter}_{uid}_{section_name.replace(' ', '_')}_{i}_{global_i}",
                     "text": chunk,
                     "metadata": {
                         "ticker": ticker,
@@ -138,6 +141,7 @@ def _iter_chunks(ticker: str, quarters: list[dict], data_mode: str = "mock") -> 
                         "chunk_index": i,
                     },
                 }
+                global_i += 1
 
 
 def _get_client():

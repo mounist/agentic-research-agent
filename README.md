@@ -214,7 +214,7 @@ python main.py -v "Analyse WMT"
 
 ## Evaluation Results (Live WRDS Data)
 
-All numbers below come from a real run against WRDS + Claude Sonnet 4 (no mock data). Raw terminal logs are checked into `artifacts/eval_original_live.txt` and `artifacts/eval_langgraph_live.txt`. The RAG vector index was built from mock transcripts because the live CIQ transcript pull currently produces duplicate chunk IDs in the indexer — the agent loop itself uses live WRDS for all other tool calls.
+All numbers below come from a real run against WRDS + Claude Sonnet 4 (no mock data). Raw terminal logs are checked into `artifacts/eval_original_live.txt` and `artifacts/eval_langgraph_live.txt`. The RAG vector index is built directly from live CIQ transcripts.
 
 Original agent loop (`agent/loop.py`), 5 sectors + repeat test on AAPL:
 
