@@ -50,10 +50,16 @@ def run_evaluation(
     tickers: list[str] | None = None,
     data_mode: str = "live",
     include_repeat_test: bool = True,
+    use_langgraph: bool = False,
 ) -> list[dict]:
     """Run full evaluation suite. Returns list of EvalRecord dicts."""
     tickers = tickers or EVAL_TICKERS
     all_records: list[EvalRecord] = []
+
+    if use_langgraph:
+        from agent.loop_langgraph import run_agent_langgraph as _run_agent
+    else:
+        _run_agent = run_agent
 
     # Clear memory for clean eval
     memory_store.clear()
@@ -68,7 +74,7 @@ def run_evaluation(
         print(f"[{i}/{len(tickers)}] Researching {ticker} (first run)...")
 
         try:
-            report, eval_rec = run_agent(query, data_mode=data_mode)
+            report, eval_rec = _run_agent(query, data_mode=data_mode)
             eval_rec.run_label = "first_run"
             all_records.append(eval_rec)
             print(f"  -> {eval_rec.steps} steps, {len(eval_rec.tool_sequence)} tool calls, "
@@ -87,7 +93,7 @@ def run_evaluation(
         print(f"\n--- REPEAT TEST: {repeat_ticker} (second run, memory should change behavior) ---")
 
         try:
-            report, eval_rec = run_agent(query, data_mode=data_mode)
+            report, eval_rec = _run_agent(query, data_mode=data_mode)
             eval_rec.run_label = "second_run_memory"
             all_records.append(eval_rec)
             print(f"  -> {eval_rec.steps} steps, {len(eval_rec.tool_sequence)} tool calls, "
@@ -124,6 +130,7 @@ def main() -> None:
     parser.add_argument("--live", action="store_true", help="Use live WRDS data")
     parser.add_argument("--ticker", type=str, help="Run single ticker only")
     parser.add_argument("--no-repeat", action="store_true", help="Skip repeat test")
+    parser.add_argument("--langgraph", action="store_true", help="Use LangGraph agent loop")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -137,6 +144,7 @@ def main() -> None:
         tickers=tickers,
         data_mode=data_mode,
         include_repeat_test=not args.no_repeat,
+        use_langgraph=args.langgraph,
     )
 
 

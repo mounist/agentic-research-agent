@@ -299,3 +299,36 @@ pytest tests/ -v
 | `test_memory.py` | 7 | Store CRUD, upsert, sector query, case insensitivity |
 | `test_registry.py` | 5 | Tool dispatch, unknown tools, memory roundtrip |
 | `test_report_validation.py` | 7 | Report structure checks (rec, confidence, risk, length) |
+
+## LangGraph Implementation
+
+An alternative agent loop lives at `agent/loop_langgraph.py`. It expresses
+the same ReAct behavior as `agent/loop.py` using a `StateGraph` with two
+nodes (`reason`, `tools`) and conditional edges. Invoke it via
+`python main.py --langgraph "..."` or
+`python -m evaluation.runner --langgraph`.
+
+**Architecture differences**
+
+| Aspect | `agent/loop.py` (manual) | `agent/loop_langgraph.py` |
+| --- | --- | --- |
+| Control flow | `while iteration < MAX` | `StateGraph` with conditional edges |
+| State | `AgentState` dataclass (mutable) | `TypedDict` returned as deltas per node |
+| Stop condition | `break` on `end_turn` | `_after_reason` routes to `END` |
+| Tool dispatch | inline in the loop body | dedicated `tool_node` |
+| Recursion guard | `MAX_ITERATIONS` | LangGraph `recursion_limit` |
+
+Both share the same `SYSTEM_PROMPT`, `TOOL_SCHEMAS`, `dispatch()`,
+`_call_claude_with_retry`, force-report prompt, and tool-budget nudge
+threshold — so behavior is functionally equivalent.
+
+**Tradeoffs**
+
+- *Manual loop*: simplest to read, zero extra dependencies, easy to step
+  through in a debugger. Preferred for quick iteration and when behavior
+  is already well-specified.
+- *LangGraph*: nodes and edges are first-class, so the graph can be
+  visualised, checkpointed, or extended with additional nodes (e.g. a
+  dedicated critique or memory-write step) without reshaping a monolithic
+  loop. Costs: an extra dependency surface (`langgraph`, `langchain-core`)
+  and a slightly heavier abstraction for what today is a two-state loop.

@@ -32,6 +32,7 @@ def main() -> None:
         action="store_true",
         help="Build (or rebuild) the RAG vector index over mock transcripts, then exit.",
     )
+    parser.add_argument("--langgraph", action="store_true", help="Use LangGraph-based agent loop instead of the manual while-loop")
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -64,7 +65,7 @@ def main() -> None:
     if args.evaluate:
         from evaluation.runner import run_evaluation
         tickers = [args.ticker.upper()] if args.ticker else None
-        run_evaluation(tickers=tickers, data_mode=data_mode)
+        run_evaluation(tickers=tickers, data_mode=data_mode, use_langgraph=args.langgraph)
         return
 
     if not args.query:
@@ -73,8 +74,13 @@ def main() -> None:
         sys.exit(1)
 
     # Single research run
-    from agent.loop import run_agent
-    print(f"FinAgent — {data_mode.upper()} mode")
+    if args.langgraph:
+        from agent.loop_langgraph import run_agent_langgraph as run_agent
+        impl_label = "LangGraph"
+    else:
+        from agent.loop import run_agent
+        impl_label = "manual loop"
+    print(f"FinAgent — {data_mode.upper()} mode ({impl_label})")
     print(f"Query: {args.query}\n")
 
     report, eval_rec = run_agent(args.query, data_mode=data_mode)

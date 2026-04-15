@@ -1,0 +1,61 @@
+Create a LangGraph-based version of the agent loop as an ALTERNATIVE to the existing agent/loop.py. Do NOT replace the original — I want both versions so I can compare tradeoffs.
+
+## What to build
+
+Create a new file `agent/loop_langgraph.py` that reimplements the same agent behavior using LangGraph's StateGraph. The existing agent/loop.py uses a manual while-loop with Claude tool_use API calls. The new version should express the same logic as a graph.
+
+## Architecture
+
+Study the existing agent/loop.py carefully first. Then build:
+
+1. **State schema**: Define an AgentState TypedDict that holds:
+   - messages (conversation history)
+   - tool_sequence (list of tool names called)
+   - iteration_count (int)
+   - input_tokens (int)
+   - output_tokens (int)  
+   - final_report (str or None)
+   - data_mode (str)
+   - query (str)
+   Do NOT put EvalRecord in state. Store raw tracking fields, and assemble EvalRecord at the end in run_agent_langgraph().
+
+2. **Graph nodes**:
+   - `reason_node`: Claude API call with tool_use. This handles ALL iterations including the first one (the agent naturally outputs a research plan as text in its first response alongside tool_use blocks — do NOT create a separate plan node, as that would add an extra API call that doesn't exist in the original). Must replicate the tool_budget_nudge logic: when len(unique tools in tool_sequence) >= 7, inject the TOOL_BUDGET_NUDGE message. Must replicate the force-report logic: when iteration_count >= MAX_ITERATIONS, inject FORCE_REPORT_PROMPT.
+   - `tool_node`: Dispatches tool calls using the existing dispatch() function from agent/loop.py. Do NOT rewrite tool dispatch logic.
+   - (No separate plan_node or synthesize_node needed — reason_node handles these cases via conditional message injection, same as the original loop.)
+
+3. **Conditional edges**:
+   - START → reason_node
+   - reason_node → tool_node (if response contains tool_use blocks)
+   - reason_node → END (if response is end_turn with no tool_use → final report)
+   - tool_node → reason_node (loop back for next iteration)
+
+4. **Entry point**: `run_agent_langgraph(query: str, data_mode: str = "live") -> tuple[str, EvalRecord]` — SAME return signature as existing `run_agent()`.
+
+## Reuse from existing code
+
+Import and reuse these from agent/loop.py — do NOT reimplement:
+- `_call_claude_with_retry` (handles exponential backoff for rate limits and 500 errors)
+- `_extract_ticker`, `_extract_recommendation`, `_extract_confidence` (parse final report for EvalRecord)
+- `dispatch` from tools (tool dispatch logic)
+- `SYSTEM_PROMPT`, `TOOL_SCHEMAS`, `FORCE_REPORT_PROMPT`, `TOOL_BUDGET_NUDGE`, `_TOOL_BUDGET_THRESHOLD` from agent/loop.py and agent/prompts.py
+- `EvalRecord`, `ToolResult` from agent/models.py
+
+## Integration
+
+- Update main.py to add a `--langgraph` flag. When set, use `run_agent_langgraph` instead of `run_agent`. Default remains the original loop.
+- Update evaluation/runner.py to accept an optional `use_langgraph=False` parameter so I can run eval on both versions.
+- Add a brief section to README.md under a new "## LangGraph Implementation" heading comparing the two implementations (architecture differences, tradeoffs).
+
+## Dependencies
+
+Add to requirements.txt with pinned minimum versions:
+- `langgraph>=0.2`
+- `langchain-core>=0.3`
+
+## Constraints
+
+- Do NOT modify agent/loop.py, agent/prompts.py, or any files in tools/
+- Behavior should be functionally equivalent, NOT identical — LLM calls are non-deterministic, so exact tool order may vary between runs. Same tools available, same dispatch logic, same stop conditions, same budget nudge threshold.
+- Same code style: type hints, docstrings, logging
+- Run existing tests after changes to verify nothing breaks
