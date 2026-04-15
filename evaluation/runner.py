@@ -2,9 +2,9 @@
 Evaluation runner — batch-execute the agent and collect structured results.
 
 Usage:
-    python -m evaluation.runner              # full eval (live mode)
-    python -m evaluation.runner --mock       # mock mode
-    python -m evaluation.runner --ticker AAPL # single ticker
+    python -m evaluation.runner              # full eval (live WRDS — default)
+    python -m evaluation.runner --mock       # credential-free mock mode
+    python -m evaluation.runner --ticker AAPL # single ticker (live)
 """
 from __future__ import annotations
 
@@ -48,7 +48,7 @@ EVAL_QUERIES: dict[str, str] = {
 
 def run_evaluation(
     tickers: list[str] | None = None,
-    data_mode: str = "mock",
+    data_mode: str = "live",
     include_repeat_test: bool = True,
 ) -> list[dict]:
     """Run full evaluation suite. Returns list of EvalRecord dicts."""
@@ -130,7 +130,7 @@ def main() -> None:
     level = logging.DEBUG if args.verbose else logging.WARNING
     logging.basicConfig(level=level, format="%(levelname)s %(name)s: %(message)s")
 
-    data_mode = "live" if args.live else "mock"
+    data_mode = "mock" if args.mock else "live"
     tickers = [args.ticker.upper()] if args.ticker else None
 
     run_evaluation(

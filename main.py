@@ -2,10 +2,10 @@
 FinAgent — Autonomous Equity Research Agent with Persistent Memory.
 
 Usage:
-    python main.py "Analyse AAPL's recent earnings and outlook"
-    python main.py --mock "Analyse AAPL's recent earnings and outlook"
-    python main.py --evaluate              # run full evaluation suite (mock)
-    python main.py --evaluate --live       # run full evaluation suite (live WRDS)
+    python main.py "Analyse AAPL's recent earnings and outlook"          # live WRDS (default)
+    python main.py --mock "Analyse AAPL's recent earnings and outlook"   # credential-free mock
+    python main.py --evaluate                                            # evaluation suite (live)
+    python main.py --evaluate --mock                                     # evaluation suite (mock)
 """
 from __future__ import annotations
 
@@ -23,8 +23,8 @@ def main() -> None:
         description="FinAgent — Autonomous Equity Research Agent",
     )
     parser.add_argument("query", nargs="?", help="Research query, e.g. 'Analyse AAPL'")
-    parser.add_argument("--mock", action="store_true", default=True, help="Use mock data (default)")
-    parser.add_argument("--live", action="store_true", help="Use live WRDS data")
+    parser.add_argument("--live", action="store_true", default=True, help="Use live WRDS data (default)")
+    parser.add_argument("--mock", action="store_true", help="Use credential-free mock data")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation suite")
     parser.add_argument("--ticker", type=str, help="Single ticker for evaluation")
     parser.add_argument(
@@ -42,22 +42,22 @@ def main() -> None:
         datefmt="%H:%M:%S",
     )
 
-    data_mode = "live" if args.live else "mock"
+    data_mode = "mock" if args.mock else "live"
 
     if args.index_transcripts:
         from rag.indexer import build_index
-        print("Building RAG transcript index...")
-        n = build_index(rebuild=True)
+        print(f"Building RAG transcript index ({data_mode} mode)...")
+        n = build_index(rebuild=True, data_mode=data_mode)
         print(f"Indexed {n} chunks.")
         return
 
-    # Auto-build index on first run if missing (mock mode only)
+    # Auto-build index on first run if missing (mock mode only — live requires explicit build)
     if data_mode == "mock":
         try:
             from rag.indexer import index_exists, build_index
             if not index_exists():
                 print("RAG index not found — building on first run (this takes ~30s)...")
-                build_index()
+                build_index(data_mode="mock")
         except ImportError:
             pass  # RAG deps optional; tool will surface error if invoked
 

@@ -30,7 +30,7 @@ SENTIMENT_MODEL: str = "claude-haiku-4-5-20251001"
 MAX_TOKENS: int = 4096
 
 # --- Data ---
-DATA_MODE: str = "mock"  # "live" or "mock"
+DATA_MODE: str = "live"  # "live" or "mock"
 DEFAULT_START_DATE: str = "2023-01-01"
 DEFAULT_END_DATE: str = "2024-12-31"
 DEFAULT_N_QUARTERS: int = 8

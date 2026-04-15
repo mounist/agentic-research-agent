@@ -23,8 +23,8 @@ EMBED_MODEL = "all-MiniLM-L6-v2"
 MIN_CHUNK_WORDS = 120
 MAX_CHUNK_WORDS = 450
 
-# Section header patterns we expect from the generator
-_SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
+# Mock-generator section-header patterns (explicit labeled sections).
+_MOCK_SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("Opening Remarks", re.compile(r"^Operator:\s*Good", re.IGNORECASE)),
     ("CEO Strategic Update", re.compile(r",\s*CEO:\s*Thank you", re.IGNORECASE)),
     ("CFO Financial Review", re.compile(r",\s*CFO:\s*Thank you", re.IGNORECASE)),
@@ -32,19 +32,47 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("Q&A", re.compile(r"question-and-answer session", re.IGNORECASE)),
 ]
 
+# Live-WRDS section-header patterns. Real CIQ transcripts lack explicit
+# labeled sections — they are speaker-turn streams ("Operator", "<Name> -
+# <Title>", "Analyst - <Name>"). We bucket speaker-turn types into coarse
+# sections; anything unrecognised stays in the current section.
+_LIVE_SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
+    ("Q&A", re.compile(r"question[-\s]and[-\s]answer", re.IGNORECASE)),
+    ("Q&A", re.compile(r"^Analyst\s*[-–]", re.IGNORECASE | re.MULTILINE)),
+    ("Prepared Remarks", re.compile(r"^Executive\s*[-–]", re.IGNORECASE | re.MULTILINE)),
+    ("Prepared Remarks", re.compile(r"\b(CEO|CFO|Chief Executive|Chief Financial)\b", re.IGNORECASE)),
+    ("Opening Remarks", re.compile(r"^Operator\b", re.IGNORECASE | re.MULTILINE)),
+]
 
-def _split_sections(text: str) -> list[tuple[str, str]]:
-    """Split transcript text into (section_name, section_text) tuples."""
+
+def _split_sections(text: str, data_mode: str = "mock") -> list[tuple[str, str]]:
+    """Split transcript text into (section_name, section_text) tuples.
+
+    For ``data_mode="live"`` we try live-WRDS speaker patterns first, then
+    fall back to a single ``Transcript`` section of generic paragraphs if
+    no live markers are found. For ``data_mode="mock"`` we use the
+    explicit labeled-section patterns written by the mock generator.
+    """
+    if data_mode == "live":
+        primary = _LIVE_SECTION_PATTERNS
+        default_name = "Transcript"
+    else:
+        primary = _MOCK_SECTION_PATTERNS
+        default_name = "Opening Remarks"
+
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     sections: list[tuple[str, list[str]]] = []
-    current_name = "Opening Remarks"
+    current_name = default_name
     current_paras: list[str] = []
+    any_match = False
     for para in paragraphs:
         matched = None
-        for name, pattern in _SECTION_PATTERNS:
+        for name, pattern in primary:
             if pattern.search(para):
                 matched = name
                 break
+        if matched:
+            any_match = True
         if matched and matched != current_name and current_paras:
             sections.append((current_name, current_paras))
             current_name = matched
@@ -55,6 +83,12 @@ def _split_sections(text: str) -> list[tuple[str, str]]:
             current_paras.append(para)
     if current_paras:
         sections.append((current_name, current_paras))
+
+    # Live fallback: if no live markers were found, emit one generic
+    # section so the paragraph-level chunker handles the whole doc.
+    if data_mode == "live" and not any_match:
+        return [("Transcript", text)]
+
     return [(name, "\n\n".join(paras)) for name, paras in sections]
 
 
@@ -86,13 +120,13 @@ def _chunk_section(section_text: str) -> list[str]:
     return chunks
 
 
-def _iter_chunks(ticker: str, quarters: list[dict]) -> Iterable[dict]:
+def _iter_chunks(ticker: str, quarters: list[dict], data_mode: str = "mock") -> Iterable[dict]:
     for q in quarters:
         quarter = q.get("quarter", "unknown")
-        text = q.get("text", "")
+        text = q.get("text", "") or q.get("componenttext", "")
         if not text:
             continue
-        for section_name, section_text in _split_sections(text):
+        for section_name, section_text in _split_sections(text, data_mode=data_mode):
             for i, chunk in enumerate(_chunk_section(section_text)):
                 yield {
                     "id": f"{ticker}_{quarter}_{section_name.replace(' ', '_')}_{i}",
@@ -132,13 +166,26 @@ def index_exists() -> bool:
         return False
 
 
-def build_index(tickers: list[str] | None = None, rebuild: bool = False) -> int:
+def build_index(
+    tickers: list[str] | None = None,
+    rebuild: bool = False,
+    data_mode: str = "live",
+) -> int:
     """
     Build the vector index over all (ticker, quarter) transcripts.
 
+    Parameters
+    ----------
+    tickers : list of ticker strings to index (defaults to the eval universe).
+    rebuild : drop the existing collection before indexing.
+    data_mode : ``"live"`` pulls from WRDS, ``"mock"`` from bundled fixtures.
+
     Returns number of chunks indexed.
     """
-    from data import mock_client
+    if data_mode == "live":
+        from data import wrds_client as _client
+    else:
+        from data import mock_client as _client
 
     if tickers is None:
         tickers = ["AAPL", "JPM", "JNJ", "XOM", "WMT"]
@@ -162,8 +209,13 @@ def build_index(tickers: list[str] | None = None, rebuild: bool = False) -> int:
     metas: list[dict] = []
 
     for ticker in tickers:
-        quarters = mock_client.query_all_transcripts(ticker)
-        for chunk in _iter_chunks(ticker, quarters):
+        if not hasattr(_client, "query_all_transcripts"):
+            logger.warning(
+                f"{data_mode} client has no query_all_transcripts; skipping {ticker}"
+            )
+            continue
+        quarters = _client.query_all_transcripts(ticker)
+        for chunk in _iter_chunks(ticker, quarters, data_mode=data_mode):
             ids.append(chunk["id"])
             docs.append(chunk["text"])
             metas.append(chunk["metadata"])

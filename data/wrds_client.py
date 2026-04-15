@@ -242,3 +242,52 @@ def query_ciq_transcript(ticker: str, quarter: str | None = None) -> pd.DataFram
         "transcriptdate": transcript_date,
         "componenttext": full_text,
     }])
+
+
+def query_all_transcripts(ticker: str, n_quarters: int = 8) -> list[dict[str, Any]]:
+    """Return recent earnings-call transcripts for ``ticker`` (RAG indexing).
+
+    Each dict carries ``ticker``, ``quarter``, ``transcriptdate`` and
+    ``componenttext`` (full concatenated transcript body). Ordered oldest
+    to newest so downstream chunk IDs are stable across incremental runs.
+    """
+    db = _get_conn()
+    tid_df = db.raw_sql(
+        """
+        SELECT td.transcriptid, td.mostimportantdateutc AS transcriptdate,
+               td.headline
+        FROM ciq.wrds_transcript_detail td
+        JOIN ciq.wrds_gvkey g ON td.companyid = g.companyid
+        JOIN comp.security s ON g.gvkey = s.gvkey
+        WHERE s.tic = %(ticker)s
+          AND td.keydeveventtypename = 'Earnings Calls'
+        ORDER BY td.mostimportantdateutc DESC
+        LIMIT %(n)s
+        """,
+        params={"ticker": ticker.upper(), "n": int(n_quarters)},
+    )
+    if tid_df.empty:
+        return []
+
+    records: list[dict[str, Any]] = []
+    for _, row in tid_df.sort_values("transcriptdate").iterrows():
+        tid = int(row["transcriptid"])
+        comp_df = db.raw_sql(
+            "SELECT componentorder, componenttext FROM ciq.ciqtranscriptcomponent "
+            "WHERE transcriptid = %(tid)s ORDER BY componentorder",
+            params={"tid": tid},
+        )
+        if comp_df.empty:
+            continue
+        full_text = "\n\n".join(comp_df["componenttext"].dropna().astype(str).tolist())
+        tdate = pd.Timestamp(row["transcriptdate"])
+        quarter = f"{tdate.year}Q{((tdate.month - 1) // 3) + 1}"
+        records.append({
+            "ticker": ticker.upper(),
+            "quarter": quarter,
+            "transcriptdate": str(row["transcriptdate"]),
+            "transcriptid": tid,
+            "componenttext": full_text,
+            "text": full_text,
+        })
+    return records
