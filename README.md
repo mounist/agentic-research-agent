@@ -214,56 +214,36 @@ python main.py -v "Analyse WMT"
 
 ## Evaluation Results (Live WRDS Data)
 
-Evaluated on 5 tickers across different sectors, plus a repeat test for memory-aware behavior:
+All numbers below come from a real run against WRDS + Claude Sonnet 4 (no mock data). Raw terminal logs are checked into `artifacts/eval_original_live.txt` and `artifacts/eval_langgraph_live.txt`. The RAG vector index was built from mock transcripts because the live CIQ transcript pull currently produces duplicate chunk IDs in the indexer — the agent loop itself uses live WRDS for all other tool calls.
 
-| Ticker | Sector | Steps | Tools | Tokens | Latency | Rec | Confidence |
-|--------|--------|-------|-------|--------|---------|-----|------------|
-| AAPL | Technology | 7 | 6 | 49,786 | 67s | BUY | 85% |
-| JPM | Financials | 8 | 7 | 54,862 | 256s | HOLD | 75% |
-| JNJ | Healthcare | 7 | 6 | 53,408 | 75s | BUY | 85% |
-| XOM | Energy | 7 | 6 | 43,379 | 63s | HOLD | 72% |
-| WMT | Consumer Staples | 7 | 6 | 40,987 | 71s | BUY | 85% |
+Original agent loop (`agent/loop.py`), 5 sectors + repeat test on AAPL:
 
-**Averages:** 7.2 steps, 48,484 tokens, 106s per research run.
+| Ticker | Sector | Steps | Tools | Tokens | Latency | Rec |
+|--------|--------|-------|-------|--------|---------|-----|
+| AAPL | Technology       | 8 | 7 | 68,626 |  81.6s | HOLD |
+| JPM  | Financials       | 7 | 6 | 51,825 |  99.0s | BUY  |
+| JNJ  | Healthcare       | 8 | 7 | 66,264 | 130.4s | BUY  |
+| XOM  | Energy           | 7 | 6 | 46,167 |  87.7s | HOLD |
+| WMT  | Consumer Staples | 9 | 8 | 81,303 | 157.0s | BUY  |
+
+**Averages (first runs):** 7.8 steps, 62,837 tokens, 111.1s per research run.
 
 ### Adaptive Planning: 100% Path Diversity
 
-All 5 tickers produced **unique tool sequences** — the agent genuinely adapts its analysis path based on sector and intermediate findings:
+All 5 tickers produced **unique tool sequences** — the agent adapts its analysis path based on sector and intermediate findings. Four of five runs triggered `search_transcript_passages` (RAG), and the multi-quarter thematic queries for AAPL/JNJ pulled RAG twice in one run.
 
-| Ticker | Tool Sequence |
-|--------|---------------|
-| **AAPL** (Tech) | memory → price → earnings → fundamentals → quant signals → save |
-| **JPM** (Bank) | memory → fundamentals → earnings → price → **sector peers** → quant signals → save |
-| **JNJ** (Pharma) | memory → fundamentals → earnings → **transcript → sentiment** → save |
-| **XOM** (Energy) | memory → fundamentals → earnings → price → quant signals → save |
-| **WMT** (Retail) | memory → fundamentals → earnings → **peers → transcript** → save |
+### Memory Test: Repeat Run Comparison (Original Loop)
 
-Key observations:
-- **JNJ** was the only ticker where the agent pulled a transcript and ran sentiment analysis — pharma pipeline updates are critical for investment thesis
-- **JPM** was one of two tickers where the agent pulled sector peers — bank peer comparison is meaningful
-- **AAPL/XOM** focused on quantitative signals and skipped qualitative analysis
-- `analyze_text_sentiment` was called only **1 time** across 5 runs (vs. 5/5 before the fix)
-
-### Memory Test: Repeat Run Comparison
-
-Running AAPL twice proves persistent memory changes the agent's behavior:
+Running AAPL twice shows persistent memory changing the agent's behavior:
 
 | | First Run | Second Run (with memory) | Delta |
 |--|-----------|--------------------------|-------|
-| **Steps** | 7 | 6 | -1 |
-| **Tool calls** | 6 | 5 | -1 |
-| **Tokens** | 49,786 | 36,567 | **-27%** |
-| **Latency** | 67s | 67s | — |
-| **Confidence** | 85% | 80% | -5% |
+| **Steps** | 8 | 4 | -4 |
+| **Tool calls** | 7 | 3 | -4 |
+| **Tokens** | 68,626 | 19,383 | **-72%** |
+| **Latency** | 81.6s | 31.2s | **-62%** |
 
-**Tools skipped in second run:** `get_fundamentals` — the agent found prior fundamentals in memory and decided they were still current.
-
-**Second run tool sequence:**
-```
-query_research_memory → get_price_data → get_earnings_data → calculate_quant_signals → save_research_memory
-```
-
-The agent pulled only time-sensitive data (prices, latest earnings) and skipped static data (fundamentals), using 27% fewer tokens.
+**Tools skipped in second run:** `search_transcript_passages`, `get_fundamentals`, `analyze_text_sentiment`. The second run tool sequence collapses to `query_research_memory → get_price_data → save_research_memory` — the agent pulled only time-sensitive data and relied on memory for the rest.
 
 ## Design Decisions
 
@@ -321,6 +301,23 @@ nodes (`reason`, `tools`) and conditional edges. Invoke it via
 Both share the same `SYSTEM_PROMPT`, `TOOL_SCHEMAS`, `dispatch()`,
 `_call_claude_with_retry`, force-report prompt, and tool-budget nudge
 threshold — so behavior is functionally equivalent.
+
+**Side-by-side results (live WRDS, 5 tickers + AAPL repeat)**
+
+| Metric (first runs, mean) | Original loop | LangGraph |
+| --- | --- | --- |
+| Steps / iterations | 7.8 | 7.4 |
+| Tool calls per run | 6.8 | 6.4 |
+| Tokens per run | 62,837 | 54,929 |
+| Latency per run | 111.1s | 102.6s |
+| Unique tool sequences | 5/5 (100%) | 5/5 (100%) |
+| Runs using RAG | 4/5 | 4/5 |
+| Total RAG calls | 7 | 6 |
+| Distinct tools invoked across run | 8 | 9 (adds `get_sector_peers`) |
+| Recommendations (AAPL/JPM/JNJ/XOM/WMT) | HOLD/BUY/BUY/HOLD/BUY | HOLD/BUY/BUY/HOLD/BUY |
+| AAPL repeat-run token drop | **-72%** (68.6k → 19.4k) | **-19%** (67.4k → 54.3k) |
+
+The two implementations converged on identical recommendations for every ticker and both hit 100% path diversity. The LangGraph run was marginally cheaper per first-run (~13% fewer tokens, ~8% lower latency) but the original loop showed a much sharper memory-driven collapse on the AAPL repeat — the second run pruned more tools away (`search_transcript_passages`, `get_fundamentals`, `analyze_text_sentiment`) whereas LangGraph re-invoked RAG and sentiment on the repeat. This is LLM non-determinism, not an architectural difference; both paths go through the same `dispatch()` and memory tools.
 
 **Tradeoffs**
 

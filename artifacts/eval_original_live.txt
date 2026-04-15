@@ -1,0 +1,77 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+15:59:27 WARNING huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+======================================================================
+  FinAgent Evaluation Suite — LIVE mode
+  5 tickers + repeat test
+======================================================================
+
+[1/5] Researching AAPL (first run)...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 14989.01it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading library list...
+Done
+  -> 8 steps, 7 tool calls, 68626 tokens, 81.6s, rec=hold
+[2/5] Researching JPM (first run)...
+  -> 7 steps, 6 tool calls, 51825 tokens, 99.0s, rec=buy
+[3/5] Researching JNJ (first run)...
+  -> 8 steps, 7 tool calls, 66264 tokens, 130.4s, rec=buy
+[4/5] Researching XOM (first run)...
+  -> 7 steps, 6 tool calls, 46167 tokens, 87.7s, rec=hold
+[5/5] Researching WMT (first run)...
+  -> 9 steps, 8 tool calls, 81303 tokens, 157.0s, rec=buy
+
+--- REPEAT TEST: AAPL (second run, memory should change behavior) ---
+  -> 4 steps, 3 tool calls, 19383 tokens, 31.2s, rec=hold
+
+Results saved to C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\output\evaluation_results.json
+
+======================================================================
+  EVALUATION SUMMARY
+======================================================================
+
+Ticker   Run                Steps Tools   Tokens  Latency Rec   
+----------------------------------------------------------------------
+AAPL     first_run              8     7    68626    81.6s hold  
+JPM      first_run              7     6    51825    99.0s buy   
+JNJ      first_run              8     7    66264   130.4s buy   
+XOM      first_run              7     6    46167    87.7s hold  
+WMT      first_run              9     8    81303   157.0s buy   
+AAPL     second_run_memory      4     3    19383    31.2s hold  
+
+--- Aggregates (first runs only) ---
+  Steps:   mean=7.8, median=8.0, range=[7-9]
+  Tokens:  mean=62837, median=66264
+  Latency: mean=111.1s, median=99.0s
+
+--- RAG Tool Usage (search_transcript_passages) ---
+  4/5 runs used RAG (80%), total 7 calls
+  Tickers using RAG: ['AAPL', 'JPM', 'JNJ', 'WMT']
+
+--- Path Diversity ---
+  5/5 unique tool sequences (diversity ratio: 100%)
+
+--- Tool Usage Distribution ---
+  search_transcript_passages        7 calls
+  query_research_memory             5 calls
+  get_fundamentals                  5 calls
+  save_research_memory              5 calls
+  get_price_data                    4 calls
+  get_earnings_data                 4 calls
+  analyze_text_sentiment            2 calls
+  calculate_quant_signals           2 calls
+
+--- Memory Test (AAPL) ---
+  First run:  8 steps, tools: ['query_research_memory', 'search_transcript_passages', 'search_transcript_passages', 'get_fundamentals', 'get_price_data', 'analyze_text_sentiment', 'save_research_memory']
+  Second run: 4 steps, tools: ['query_research_memory', 'get_price_data', 'save_research_memory']
+  Sequences differ: True
+  Tools only in first run:  ['analyze_text_sentiment', 'get_fundamentals', 'search_transcript_passages']
+
+======================================================================
+

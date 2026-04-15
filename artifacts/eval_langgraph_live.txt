@@ -1,0 +1,80 @@
+C:\Users\Yangc\earnings_text_alpha\.venv\Lib\site-packages\langchain_core\_api\deprecation.py:25: UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+  from pydantic.v1.fields import FieldInfo as FieldInfoV1
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+16:09:25 WARNING huggingface_hub.utils._http: Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+======================================================================
+  FinAgent Evaluation Suite — LIVE mode
+  5 tickers + repeat test
+======================================================================
+
+[1/5] Researching AAPL (first run)...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 12371.87it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading library list...
+Done
+  -> 8 steps, 7 tool calls, 67356 tokens, 108.6s, rec=hold
+[2/5] Researching JPM (first run)...
+  -> 7 steps, 6 tool calls, 51772 tokens, 108.4s, rec=buy
+[3/5] Researching JNJ (first run)...
+  -> 8 steps, 7 tool calls, 65363 tokens, 124.5s, rec=buy
+[4/5] Researching XOM (first run)...
+  -> 7 steps, 6 tool calls, 48104 tokens, 90.1s, rec=hold
+[5/5] Researching WMT (first run)...
+  -> 7 steps, 6 tool calls, 42048 tokens, 81.6s, rec=buy
+
+--- REPEAT TEST: AAPL (second run, memory should change behavior) ---
+  -> 7 steps, 6 tool calls, 54332 tokens, 97.5s, rec=hold
+
+Results saved to C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\output\evaluation_results.json
+
+======================================================================
+  EVALUATION SUMMARY
+======================================================================
+
+Ticker   Run                Steps Tools   Tokens  Latency Rec   
+----------------------------------------------------------------------
+AAPL     first_run              8     7    67356   108.6s hold  
+JPM      first_run              7     6    51772   108.4s buy   
+JNJ      first_run              8     7    65363   124.5s buy   
+XOM      first_run              7     6    48104    90.1s hold  
+WMT      first_run              7     6    42048    81.6s buy   
+AAPL     second_run_memory      7     6    54332    97.5s hold  
+
+--- Aggregates (first runs only) ---
+  Steps:   mean=7.4, median=7.0, range=[7-8]
+  Tokens:  mean=54929, median=51772
+  Latency: mean=102.6s, median=108.4s
+
+--- RAG Tool Usage (search_transcript_passages) ---
+  4/5 runs used RAG (80%), total 6 calls
+  Tickers using RAG: ['AAPL', 'JPM', 'JNJ', 'WMT']
+
+--- Path Diversity ---
+  5/5 unique tool sequences (diversity ratio: 100%)
+
+--- Tool Usage Distribution ---
+  search_transcript_passages        6 calls
+  query_research_memory             5 calls
+  get_fundamentals                  5 calls
+  save_research_memory              5 calls
+  get_price_data                    4 calls
+  get_earnings_data                 4 calls
+  analyze_text_sentiment            1 calls
+  calculate_quant_signals           1 calls
+  get_sector_peers                  1 calls
+
+--- Memory Test (AAPL) ---
+  First run:  8 steps, tools: ['query_research_memory', 'search_transcript_passages', 'search_transcript_passages', 'get_fundamentals', 'get_price_data', 'analyze_text_sentiment', 'save_research_memory']
+  Second run: 7 steps, tools: ['query_research_memory', 'search_transcript_passages', 'search_transcript_passages', 'get_price_data', 'analyze_text_sentiment', 'save_research_memory']
+  Sequences differ: True
+  Tools only in first run:  ['get_fundamentals']
+
+======================================================================
+
