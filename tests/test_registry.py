@@ -10,6 +10,7 @@ class TestToolRegistry:
             "get_sector_peers", "get_earnings_transcript",
             "analyze_text_sentiment", "calculate_quant_signals",
             "query_research_memory", "save_research_memory",
+            "search_transcript_passages",
         }
         assert set(TOOL_REGISTRY.keys()) == expected
 

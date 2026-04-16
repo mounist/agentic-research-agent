@@ -173,7 +173,7 @@ def _get_graph():
 
 
 def run_agent_langgraph(
-    query: str, data_mode: str = "live"
+    query: str, data_mode: str = "mock"
 ) -> tuple[str, EvalRecord]:
     """Execute the LangGraph agent for a single research query.
 

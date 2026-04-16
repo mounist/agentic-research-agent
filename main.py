@@ -23,7 +23,7 @@ def main() -> None:
         description="FinAgent — Autonomous Equity Research Agent",
     )
     parser.add_argument("query", nargs="?", help="Research query, e.g. 'Analyse AAPL'")
-    parser.add_argument("--live", action="store_true", default=True, help="Use live WRDS data (default)")
+    parser.add_argument("--live", action="store_true", default=False, help="Use live WRDS data (default)")
     parser.add_argument("--mock", action="store_true", help="Use credential-free mock data")
     parser.add_argument("--evaluate", action="store_true", help="Run evaluation suite")
     parser.add_argument("--ticker", type=str, help="Single ticker for evaluation")

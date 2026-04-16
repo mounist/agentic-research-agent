@@ -38,6 +38,7 @@ DEFAULT_N_QUARTERS: int = 8
 # --- Paths ---
 ROOT: Path = Path(__file__).resolve().parent
 MOCK_DATA_DIR: Path = ROOT / "mock_data"
+CACHE_DIR: Path = ROOT / "data_cache"
 OUTPUT_DIR: Path = ROOT / "output"
 MEMORY_PATH: Path = Path.home() / ".finagent" / "research_memory.json"
 

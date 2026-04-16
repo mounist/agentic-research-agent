@@ -15,7 +15,7 @@ import config
 
 logger = logging.getLogger(__name__)
 
-CHROMA_DIR: Path = config.MOCK_DATA_DIR / "chroma_db"
+CHROMA_DIR: Path = config.CACHE_DIR / "chroma_db"
 COLLECTION_NAME = "earnings_transcripts"
 EMBED_MODEL = "all-MiniLM-L6-v2"
 

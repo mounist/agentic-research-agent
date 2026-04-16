@@ -23,9 +23,7 @@ build/
 .vscode/
 .idea/
 
-# Mock data generator script (not needed in repo)
-mock_data/generate_*.py
-
 # RAG vector store and downloaded embedding models
 mock_data/chroma_db/
+data_cache/
 models/
