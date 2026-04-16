@@ -1,5 +1,6 @@
 """Generate realistic mock daily stock price data for 5 tickers."""
 import json
+from pathlib import Path
 import numpy as np
 from datetime import datetime, timedelta
 
@@ -76,11 +77,11 @@ for ticker, cfg in tickers.items():
 
     result[ticker] = records
 
-output_path = r"C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\mock_data\price_data.json"
-with open(output_path, "w") as f:
+OUT = Path(__file__).resolve().parent / "price_data.json"
+with open(OUT, "w") as f:
     json.dump(result, f, indent=2)
 
-print(f"Written {output_path}")
+print(f"Written {OUT}")
 print(f"Tickers: {list(result.keys())}")
 print(f"Trading days: {n_days}")
 for t in result:

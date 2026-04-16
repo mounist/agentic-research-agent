@@ -1,0 +1,49 @@
+Two remaining leaks to clean up before sharing.
+
+## Issue 1 (functional bug + path leak): fix hardcoded Windows path in generate_price_data.py
+
+The file mock_data/generate_price_data.py line 79 has:
+  output_path = r"C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\mock_data\price_data.json"
+
+This breaks for anyone cloning the repo and leaks my username/dir structure.
+
+Fix: replace line 79 and the surrounding write logic to use the same pattern as the sibling generate_transcripts.py (line 16 uses `OUT = Path(__file__).resolve().parent / "transcripts.json"`).
+
+Expected fix:
+  from pathlib import Path  # add to imports if not already there
+  OUT = Path(__file__).resolve().parent / "price_data.json"
+  with open(OUT, "w") as f:
+      json.dump(result, f, indent=2)
+  print(f"Written {OUT}")
+
+Verify by running the script: python mock_data/generate_price_data.py — it should regenerate price_data.json without errors.
+
+## Issue 2 (path leak in logs): strip Windows absolute paths from eval logs
+
+The files artifacts/eval_original_live.txt and artifacts/eval_langgraph_live.txt contain Windows absolute paths like:
+  C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\output\evaluation_results.json
+  C:\Users\Yangc\earnings_text_alpha\.venv\Lib\site-packages\...
+
+Replace `C:\Users\Yangc\earnings_text_alpha\` with empty string (turning them into relative-style paths) in all artifacts/*.txt files. Preserve file encoding:
+
+powershell -Command "Get-ChildItem 'C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\artifacts\*.txt' | ForEach-Object { $content = (Get-Content $_.FullName -Raw) -replace 'C:\\Users\\Yangc\\earnings_text_alpha\\', ''; [System.IO.File]::WriteAllText($_.FullName, $content) }"
+
+Verify by grepping:
+powershell -Command "Select-String -Path 'C:\Users\Yangc\earnings_text_alpha\agentic_research_agent\artifacts\*.txt' -Pattern 'Yangc|earnings_text_alpha'"
+This should return nothing.
+
+## 3. Final sanity scan — no "Yangc" anywhere in the project
+powershell -Command "Get-ChildItem -Path 'C:\Users\Yangc\earnings_text_alpha\agentic_research_agent' -Recurse -File | Select-String -Pattern 'Yangc' | Select-Object Path, LineNumber, Line"
+
+Should return nothing. If it does, tell me what file and we'll decide how to handle.
+
+## 4. Commit
+git add -A && git commit -m "chore: fix hardcoded path in generate_price_data, scrub Windows paths from eval logs"
+
+## 5. Re-zip — OVERWRITE the existing final zip
+powershell -Command "Get-ChildItem -Path 'C:\Users\Yangc\earnings_text_alpha\agentic_research_agent' -Recurse -Force | Where-Object { $_.FullName -notmatch '\\\.env$|\\\.git($|\\)|\\__pycache__($|\\)|\\\.pytest_cache($|\\)|\\\.claude($|\\)|\\chroma_db($|\\)|\\data_cache($|\\)|\\output($|\\)|\\prompt\.txt$' } | Compress-Archive -DestinationPath 'C:\Users\Yangc\Desktop\agentic_research_agent_final.zip' -Force"
+
+## 6. Verify the final zip
+powershell -Command "Expand-Archive -Path 'C:\Users\Yangc\Desktop\agentic_research_agent_final.zip' -DestinationPath 'C:\Users\Yangc\Desktop\_zip_verify' -Force; Write-Host '--- SHOULD BE EMPTY ---'; Get-ChildItem -Path 'C:\Users\Yangc\Desktop\_zip_verify' -Recurse -File | Select-String -Pattern 'Yangc' | Select-Object Path, LineNumber, Line; Write-Host '--- If nothing above, all path leaks are scrubbed ---'; Remove-Item 'C:\Users\Yangc\Desktop\_zip_verify' -Recurse -Force"
+
+Report step 6 output — should be empty.
